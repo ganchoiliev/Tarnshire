@@ -91,3 +91,38 @@
     }
   }
 }
+
+/* Route-split hover de-emphasis (pure CSS, no JS) */
+@media (hover: hover) and (pointer: fine) {
+  .route-split:hover .route-funnel:not(:hover) {
+    opacity: 0.55;
+  }
+  .route-split:hover .route-funnel:not(:hover) .route-funnel-lede,
+  .route-split:hover .route-funnel:not(:hover) .route-funnel-meta {
+    opacity: 0.4;
+  }
+  .route-split:hover .route-funnel:not(:hover) .route-funnel-image {
+    opacity: 0.10;
+  }
+}
+
+/* Route-funnel entrance animation */
+@keyframes route-funnel-enter {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.route-funnel {
+  animation: route-funnel-enter var(--duration-slow) var(--ease-emphasis) backwards;
+}
+
+.route-funnel[data-variant="home"]     { animation-delay: 80ms; }
+.route-funnel[data-variant="business"] { animation-delay: 240ms; }
+
+/* The global prefers-reduced-motion rule from layer base already neutralises animation-duration to 0.01ms, so no override needed here. */
