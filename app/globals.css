@@ -126,3 +126,36 @@
 .route-funnel[data-variant="business"] { animation-delay: 240ms; }
 
 /* The global prefers-reduced-motion rule from layer base already neutralises animation-duration to 0.01ms, so no override needed here. */
+
+.prose-tarnshire p { margin-bottom: 1.25em; }
+.prose-tarnshire p:last-child { margin-bottom: 0; }
+.prose-tarnshire h3 {
+  font-family: var(--font-display-loaded), var(--font-display);
+  font-size: var(--text-heading-lg);
+  line-height: 1.15;
+  letter-spacing: var(--tracking-heading);
+  color: var(--color-ink);
+  font-weight: 500;
+  margin-top: 2em;
+  margin-bottom: 0.6em;
+}
+.prose-tarnshire strong { color: var(--color-ink); font-weight: 500; }
+.prose-tarnshire a {
+  color: var(--color-ink);
+  text-decoration: underline;
+  text-decoration-thickness: 0.5px;
+  text-underline-offset: 4px;
+  transition: color var(--duration-fast) var(--ease-emphasis);
+}
+.prose-tarnshire a:hover { color: var(--color-mineral); }
+.prose-tarnshire ul { list-style: none; padding: 0; margin: 0 0 1.25em; }
+.prose-tarnshire ul li { padding-left: 1.5em; position: relative; margin-bottom: 0.5em; }
+.prose-tarnshire ul li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.7em;
+  width: 0.6em;
+  height: 1px;
+  background: var(--color-mineral);
+}
