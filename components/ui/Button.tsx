@@ -13,6 +13,7 @@ type Common = {
 
 type AsLink = Common & {
   href: string;
+  prefetch?: boolean;
   type?: never;
   onClick?: never;
 };
@@ -47,7 +48,7 @@ export function Button(props: ButtonProps) {
 
   if ("href" in props && props.href) {
     return (
-      <Link href={props.href} className={cls}>
+      <Link href={props.href} prefetch={props.prefetch} className={cls}>
         <span>{children}</span>
         <span aria-hidden>→</span>
       </Link>
