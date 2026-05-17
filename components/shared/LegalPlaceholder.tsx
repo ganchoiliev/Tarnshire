@@ -26,7 +26,7 @@ export function LegalPlaceholder({ lastUpdated, intendedPolicy }: LegalPlacehold
             className="text-[var(--color-neutral-700)]"
             style={{ fontSize: "var(--text-body-lg)", lineHeight: 1.6 }}
           >
-            Tarnshire&apos;s formal legal documents are being drafted with a UK solicitor and will be published here in Q3 2026, before the brand begins commercial trading. The plain-English summary below describes the policy that the formal document will codify. If you need the formal terms before Q3 2026, email{" "}
+            Tarnshire is a trading name of Brushly Ltd, a company registered in England and Wales (Company No. 17056861) with registered office at 18 Howard Road, Reigate, RH2 7JE. Tarnshire&apos;s formal legal documents are being drafted with a UK solicitor and will be published here in Q3 2026, before the brand begins commercial trading. The plain-English summary below describes the policy that the formal document will codify. If you need the formal terms before Q3 2026, email{" "}
             <a
               href="mailto:hello@tarnshire.co.uk"
               className="text-[var(--color-ink)] underline underline-offset-4 decoration-[0.5px] hover:text-[var(--color-mineral)] transition-colors duration-[var(--duration-fast)]"
