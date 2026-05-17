@@ -10,6 +10,7 @@ import { QuoteCheckboxGroup } from "./QuoteCheckboxGroup";
 import { QuoteInput } from "./QuoteInput";
 import { QuoteDateInput } from "./QuoteDateInput";
 import { Button } from "@/components/ui/Button";
+import { getSupabase } from "@/lib/supabase/browser";
 import { type QuoteState, initialQuoteState, type StepId } from "./types";
 
 const SECTOR_OPTIONS = [
@@ -142,6 +143,9 @@ export function QuoteFlow() {
   const [state, setState] = useState<QuoteState>(initialQuoteState);
   const [submitted, setSubmitted] = useState(false);
   const [attemptedAdvance, setAttemptedAdvance] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
+  const [submittedRef, setSubmittedRef] = useState<string | null>(null);
 
   function update<K extends keyof QuoteState>(key: K, value: QuoteState[K]) {
     setState((s) => ({ ...s, [key]: value }));
@@ -161,9 +165,28 @@ export function QuoteFlow() {
     if (step > 1) setStep((step - 1) as StepId);
   }
 
-  function submit() {
-    console.log("Tarnshire quote request submitted:", state);
-    setSubmitted(true);
+  async function submit() {
+    setSubmitError(null);
+    setIsSubmitting(true);
+    try {
+      const { data, error } = await getSupabase().functions.invoke("submit-quote-request", {
+        body: state,
+      });
+      if (error) throw error;
+      if (!data?.ok) {
+        throw new Error(
+          "Submission did not confirm. Please try again or email hello@tarnshire.co.uk.",
+        );
+      }
+      setSubmittedRef(data.id ?? null);
+      setSubmitted(true);
+    } catch (err) {
+      const message =
+        err instanceof Error ? err.message : "Something went wrong. Please try again.";
+      setSubmitError(message);
+    } finally {
+      setIsSubmitting(false);
+    }
   }
 
   if (submitted) {
@@ -188,11 +211,19 @@ export function QuoteFlow() {
             Thanks. We&apos;ll be in touch within 24 working hours.
           </h2>
           <p
-            className="text-[var(--color-neutral-700)] mx-auto max-w-[560px]"
+            className="text-[var(--color-neutral-700)] mx-auto max-w-[560px] mb-6"
             style={{ fontSize: "var(--text-body-lg)", lineHeight: 1.6 }}
           >
             A confirmation will land in your inbox shortly. Our operations lead will reach out within 24 working hours, Monday to Friday, to confirm walkthrough details.
           </p>
+          {submittedRef ? (
+            <p
+              className="text-[var(--color-neutral-500)] uppercase"
+              style={{ fontSize: "var(--text-caption)", letterSpacing: "var(--tracking-caption)" }}
+            >
+              Reference: {submittedRef}
+            </p>
+          ) : null}
         </Container>
       </section>
     );
@@ -513,18 +544,45 @@ export function QuoteFlow() {
                 </div>
               ))}
             </dl>
-            <div className="flex items-center justify-between gap-4 mt-4">
-              <button
-                type="button"
-                onClick={() => setStep(1)}
-                className="text-[var(--color-ink)] hover:text-[var(--color-mineral)] underline underline-offset-4 decoration-[0.5px] transition-colors duration-[var(--duration-fast)]"
-                style={{ fontSize: "var(--text-body)" }}
-              >
-                Edit details
-              </button>
-              <Button onClick={submit} variant="primary" size="lg">
-                Send request
-              </Button>
+            <div className="flex flex-col gap-4 mt-4">
+              {submitError ? (
+                <div
+                  className="p-4 border border-[var(--color-signal)] rounded-[var(--radius-sm)] bg-[var(--color-bone)]"
+                  role="alert"
+                >
+                  <p
+                    className="text-[var(--color-signal)] font-medium mb-1"
+                    style={{ fontSize: "var(--text-body-sm)" }}
+                  >
+                    Submission failed.
+                  </p>
+                  <p
+                    className="text-[var(--color-neutral-700)]"
+                    style={{ fontSize: "var(--text-body-sm)", lineHeight: 1.5 }}
+                  >
+                    {submitError}
+                  </p>
+                </div>
+              ) : null}
+              <div className="flex items-center justify-between gap-4">
+                <button
+                  type="button"
+                  onClick={() => setStep(1)}
+                  disabled={isSubmitting}
+                  className="text-[var(--color-ink)] hover:text-[var(--color-mineral)] underline underline-offset-4 decoration-[0.5px] transition-colors duration-[var(--duration-fast)] disabled:opacity-30 disabled:cursor-not-allowed"
+                  style={{ fontSize: "var(--text-body)" }}
+                >
+                  Edit details
+                </button>
+                <Button
+                  onClick={submit}
+                  variant="primary"
+                  size="lg"
+                  className={isSubmitting ? "opacity-60 cursor-wait pointer-events-none" : ""}
+                >
+                  {isSubmitting ? "Sending..." : "Send request"}
+                </Button>
+              </div>
             </div>
           </div>
         ) : null}
