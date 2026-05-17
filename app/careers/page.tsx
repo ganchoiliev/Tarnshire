@@ -4,13 +4,17 @@ import { SiteFooter } from "@/components/layout/SiteFooter";
 import { PageHero } from "@/components/shared/PageHero";
 import { Prose } from "@/components/shared/Prose";
 import { CleanerShowcase } from "@/components/home/CleanerShowcase";
-import { Container } from "@/components/ui/Container";
-import { Button } from "@/components/ui/Button";
+import { CareersForm } from "@/components/careers/CareersForm";
 
 export const metadata: Metadata = {
   title: "Careers — Tarnshire",
   description:
-    "Become a Tarnshire cleaner. Self-employed, fairly paid, with your own recurring clients. We're hiring across Didsbury, Chorlton, and Withington.",
+    "Become a Tarnshire cleaner. Self-employed, fairly paid, with your own recurring clients across Didsbury, Chorlton, and Withington. Five-working-day response.",
+  openGraph: {
+    title: "Tarnshire — Careers",
+    description: "Self-employed, fairly paid, recurring clients in your own borough.",
+    images: ["/img/1-5.jpg"],
+  },
 };
 
 export default function CareersPage() {
@@ -21,16 +25,8 @@ export default function CareersPage() {
         <PageHero
           eyebrow="Careers"
           headline="Become a Tarnshire cleaner."
-          lede="Self-employed, fairly paid, with your own recurring clients in your own borough. Tarnshire is hiring our founding contractor cohort across Didsbury, Chorlton, and Withington now."
-        >
-          <Button
-            href="mailto:careers@tarnshire.co.uk?subject=Application%20%E2%80%94%20Tarnshire%20cleaner"
-            variant="primary"
-            size="lg"
-          >
-            Apply to join the network
-          </Button>
-        </PageHero>
+          lede="Self-employed, fairly paid, with your own recurring clients in your own borough. Tarnshire is hiring our founding contractor cohort across Didsbury, Chorlton, and Withington now. Application below — five-working-day response."
+        />
 
         <Prose eyebrow="What we offer" heading="The deal.">
           <ul>
@@ -74,36 +70,7 @@ export default function CareersPage() {
 
         <CleanerShowcase />
 
-        <section className="py-20 md:py-28 bg-[var(--color-bone-soft)] border-t border-[var(--color-neutral-100)]">
-          <Container width="narrow" className="text-center">
-            <h2
-              className="font-medium text-[var(--color-ink)] mb-5"
-              style={{
-                fontFamily: "var(--font-display-loaded), var(--font-display)",
-                fontSize: "var(--text-display-lg)",
-                lineHeight: 1.0,
-                letterSpacing: "var(--tracking-display)",
-              }}
-            >
-              Ready to apply?
-            </h2>
-            <p
-              className="text-[var(--color-neutral-700)] mb-10 mx-auto max-w-[520px]"
-              style={{ fontSize: "var(--text-body-lg)", lineHeight: 1.55 }}
-            >
-              Send us your name, the borough you&apos;d work in, your housekeeping experience to date, and a sentence about why you&apos;d choose Tarnshire over another cleaning brand.
-            </p>
-            <div className="inline-flex">
-              <Button
-                href="mailto:careers@tarnshire.co.uk?subject=Application%20%E2%80%94%20Tarnshire%20cleaner"
-                variant="primary"
-                size="lg"
-              >
-                Apply by email
-              </Button>
-            </div>
-          </Container>
-        </section>
+        <CareersForm />
       </main>
       <SiteFooter />
     </>
