@@ -20,7 +20,7 @@ export function FinalCTA() {
           className="text-[var(--color-neutral-700)] mb-10 mx-auto max-w-[480px]"
           style={{ fontSize: "var(--text-body-lg)", lineHeight: 1.55 }}
         >
-          Book in 90 seconds. Cancel any time. Same cleaner every visit.
+          Book your first clean. Cancel any time. Same cleaner every visit.
         </p>
         <div className="inline-flex">
           <Button href="/home/book" variant="accent" size="lg">

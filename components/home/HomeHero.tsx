@@ -43,11 +43,11 @@ export function HomeHero() {
             style={{ fontSize: "var(--text-body-lg)", lineHeight: 1.55 }}
           >
             Premium recurring housekeeping in Didsbury, Chorlton, and Withington.
-            Vetted, insured, instantly bookable. A weekly hour returned to your week.
+            Vetted, insured, same cleaner every visit. A weekly hour returned to your week.
           </p>
           <div className="flex flex-wrap items-center gap-6">
             <Button href="/home/book" variant="accent" size="lg">
-              Book in 90 seconds
+              Book your first clean
             </Button>
             <Link
               href="/home/pricing"

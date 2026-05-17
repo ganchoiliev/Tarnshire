@@ -13,11 +13,11 @@ import { FinalCTA } from "@/components/home/FinalCTA";
 export const metadata: Metadata = {
   title: "For Home — Premium recurring housekeeping in M20, M21, M14",
   description:
-    "Premium recurring housekeeping in Didsbury, Chorlton, and Withington. Same cleaner every visit. DBS-checked, insured, instantly bookable.",
+    "Premium recurring housekeeping in Didsbury, Chorlton, and Withington. Same cleaner every visit. DBS-checked, insured, book your first clean in two clicks.",
   openGraph: {
     title: "Tarnshire For Home — Premium recurring housekeeping in Manchester",
     description:
-      "Same cleaner every visit. Vetted, insured, instantly bookable across M20, M21, and M14.",
+      "Same cleaner every visit. Vetted, insured, bookable across M20, M21, and M14.",
     images: ["/img/1-3.jpg"],
   },
 };
