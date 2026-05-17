@@ -101,7 +101,7 @@ serve(async (req: Request) => {
       right_to_work: data.rightToWork,
       dbs_willing: data.dbsWilling,
       self_employed_ok: data.selfEmployedOk,
-      references: data.references,
+      reference_contacts: data.references,
       anything_else: data.anythingElse || null,
     })
     .select("id, created_at")
