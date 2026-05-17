@@ -6,7 +6,10 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "sync": "git fetch origin && git checkout main && git pull origin main",
+    "predeploy:edge": "npm run sync",
+    "deploy:edge": "npx supabase functions deploy submit-quote-request"
   },
   "dependencies": {
     "@gsap/react": "^2.1.2",
