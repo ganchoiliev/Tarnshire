@@ -1,15 +1,25 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import { updateQuoteStatusAction, updateApplicationStatusAction } from "./actions";
+import {
+  updateQuoteStatusAction,
+  updateApplicationStatusAction,
+  updateBookingStatusAction,
+} from "./actions";
 
-type Kind = "quote" | "application";
+type Kind = "quote" | "application" | "booking";
 
 type Props = {
   kind: Kind;
   id: string;
   currentStatus: string;
   options: { value: string; label: string }[];
+};
+
+const ACTION_BY_KIND: Record<Kind, (id: string, status: string) => Promise<{ ok: true } | { ok: false; error: string }>> = {
+  quote: updateQuoteStatusAction,
+  application: updateApplicationStatusAction,
+  booking: updateBookingStatusAction,
 };
 
 export function AdminStatusSelect({ kind, id, currentStatus, options }: Props) {
@@ -22,7 +32,7 @@ export function AdminStatusSelect({ kind, id, currentStatus, options }: Props) {
     setStatus(newStatus);
     setError(null);
     startTransition(async () => {
-      const action = kind === "quote" ? updateQuoteStatusAction : updateApplicationStatusAction;
+      const action = ACTION_BY_KIND[kind];
       const result = await action(id, newStatus);
       if (!result.ok) {
         setError(result.error ?? "Update failed");

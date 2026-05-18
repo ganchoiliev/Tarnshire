@@ -1,14 +1,24 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import { updateQuoteNotesAction, updateApplicationNotesAction } from "./actions";
+import {
+  updateQuoteNotesAction,
+  updateApplicationNotesAction,
+  updateBookingNotesAction,
+} from "./actions";
 
-type Kind = "quote" | "application";
+type Kind = "quote" | "application" | "booking";
 
 type Props = {
   kind: Kind;
   id: string;
   currentNotes: string | null;
+};
+
+const ACTION_BY_KIND: Record<Kind, (id: string, notes: string) => Promise<{ ok: true } | { ok: false; error: string }>> = {
+  quote: updateQuoteNotesAction,
+  application: updateApplicationNotesAction,
+  booking: updateBookingNotesAction,
 };
 
 export function AdminNotesEditor({ kind, id, currentNotes }: Props) {
@@ -20,7 +30,7 @@ export function AdminNotesEditor({ kind, id, currentNotes }: Props) {
   function handleSave() {
     setSaved(false);
     startTransition(async () => {
-      const action = kind === "quote" ? updateQuoteNotesAction : updateApplicationNotesAction;
+      const action = ACTION_BY_KIND[kind];
       const result = await action(id, notes);
       if (result.ok) {
         setSaved(true);

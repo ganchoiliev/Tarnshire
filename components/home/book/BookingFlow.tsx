@@ -8,6 +8,8 @@ import { QuoteRadioGroup } from "@/components/business/quote/QuoteRadioGroup";
 import { QuoteCheckboxGroup } from "@/components/business/quote/QuoteCheckboxGroup";
 import { QuoteDateInput } from "@/components/business/quote/QuoteDateInput";
 import { QuoteTextarea } from "@/components/business/quote/QuoteTextarea";
+import { StripePaymentStep } from "./StripePaymentStep";
+import { getSupabase } from "@/lib/supabase/browser";
 import {
   type BookingState,
   initialBookingState,
@@ -51,20 +53,6 @@ function validateStep(state: BookingState, step: StepId): boolean {
   }
 }
 
-type SubmitResult = { ok: boolean; error?: string };
-
-async function submitWaitlist(email: string, postcode: string): Promise<SubmitResult> {
-  console.log("Tarnshire waitlist signup:", { email, postcode });
-  await new Promise((r) => setTimeout(r, 600));
-  return { ok: true };
-}
-
-async function submitBooking(state: BookingState): Promise<SubmitResult> {
-  console.log("Tarnshire booking submitted (no payment taken yet):", state);
-  await new Promise((r) => setTimeout(r, 600));
-  return { ok: true };
-}
-
 export function BookingFlow() {
   const [step, setStep] = useState<StepId>(1);
   const [state, setState] = useState<BookingState>(initialBookingState);
@@ -72,6 +60,10 @@ export function BookingFlow() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState<null | "booking" | "waitlist">(null);
   const [submitError, setSubmitError] = useState<string | null>(null);
+  const [clientSecret, setClientSecret] = useState<string | null>(null);
+  const [bookingId, setBookingId] = useState<string | null>(null);
+  const [amountPence, setAmountPence] = useState<number | null>(null);
+  const [paymentStarted, setPaymentStarted] = useState(false);
 
   function update<K extends keyof BookingState>(key: K, value: BookingState[K]) {
     setState((s) => ({ ...s, [key]: value }));
@@ -101,10 +93,20 @@ export function BookingFlow() {
     }
     setSubmitError(null);
     setIsSubmitting(true);
-    const result = await submitWaitlist(state.waitlistEmail, state.postcode);
-    setIsSubmitting(false);
-    if (result.ok) setSubmitted("waitlist");
-    else setSubmitError(result.error ?? "Something went wrong. Please try again.");
+    try {
+      const { data, error } = await getSupabase().functions.invoke("submit-waitlist", {
+        body: { email: state.waitlistEmail, postcode: state.postcode },
+      });
+      if (error) throw error;
+      if (!data?.ok) throw new Error("Waitlist signup failed. Please try again.");
+      setSubmitted("waitlist");
+    } catch (err) {
+      setSubmitError(
+        err instanceof Error ? err.message : "Something went wrong. Please try again.",
+      );
+    } finally {
+      setIsSubmitting(false);
+    }
   }
 
   async function handleBookingSubmit() {
@@ -114,10 +116,25 @@ export function BookingFlow() {
     }
     setSubmitError(null);
     setIsSubmitting(true);
-    const result = await submitBooking(state);
-    setIsSubmitting(false);
-    if (result.ok) setSubmitted("booking");
-    else setSubmitError(result.error ?? "Something went wrong. Please try again.");
+    try {
+      const { data, error } = await getSupabase().functions.invoke("create-booking", {
+        body: state,
+      });
+      if (error) throw error;
+      if (!data?.ok || !data.client_secret) {
+        throw new Error("Booking setup failed. Please try again.");
+      }
+      setClientSecret(data.client_secret);
+      setBookingId(data.booking_id);
+      setAmountPence(data.amount_pence);
+      setPaymentStarted(true);
+    } catch (err) {
+      setSubmitError(
+        err instanceof Error ? err.message : "Something went wrong. Please try again.",
+      );
+    } finally {
+      setIsSubmitting(false);
+    }
   }
 
   if (submitted === "waitlist") {
@@ -161,7 +178,7 @@ export function BookingFlow() {
             className="text-[var(--color-mineral)] font-medium uppercase mb-5"
             style={{ fontSize: "var(--text-label)", letterSpacing: "var(--tracking-label)" }}
           >
-            Captured
+            Confirmed
           </p>
           <h2
             className="font-medium text-[var(--color-ink)] mb-6"
@@ -172,20 +189,22 @@ export function BookingFlow() {
               letterSpacing: "var(--tracking-display)",
             }}
           >
-            Booking details captured.
+            Booking confirmed. Payment received.
           </h2>
           <p
             className="text-[var(--color-neutral-700)] mx-auto max-w-[560px] mb-6"
             style={{ fontSize: "var(--text-body-lg)", lineHeight: 1.6 }}
           >
-            Payment integration completes in the next build session. Your card was <strong>not charged</strong>. When payment goes live, this confirmation will include a receipt and assigned cleaner.
+            A confirmation email is on its way to <strong>{state.contactEmail}</strong>. Our operations lead will contact you within 24 working hours to confirm which cleaner will attend on {state.preferredDate}.
           </p>
-          <p
-            className="text-[var(--color-neutral-500)] uppercase"
-            style={{ fontSize: "var(--text-caption)", letterSpacing: "var(--tracking-caption)" }}
-          >
-            Test reference: {Date.now().toString(36).toUpperCase()}
-          </p>
+          {bookingId ? (
+            <p
+              className="text-[var(--color-neutral-500)] uppercase"
+              style={{ fontSize: "var(--text-caption)", letterSpacing: "var(--tracking-caption)" }}
+            >
+              Reference: {bookingId}
+            </p>
+          ) : null}
         </Container>
       </section>
     );
@@ -432,168 +451,154 @@ export function BookingFlow() {
                 letterSpacing: "var(--tracking-heading)",
               }}
             >
-              Your details and payment.
+              {paymentStarted ? "Payment." : "Your details and payment."}
             </h2>
-            <QuoteInput
-              id="contactName"
-              label="Your name"
-              required
-              autoComplete="name"
-              value={state.contactName}
-              onChange={(v) => update("contactName", v)}
-              error={
-                showErrors && state.contactName.trim().length === 0
-                  ? "Tell us your name."
-                  : undefined
-              }
-            />
-            <QuoteInput
-              id="contactEmail"
-              label="Email"
-              type="email"
-              required
-              autoComplete="email"
-              value={state.contactEmail}
-              onChange={(v) => update("contactEmail", v)}
-              helper="Booking confirmation goes here."
-              error={
-                showErrors && !isEmail(state.contactEmail)
-                  ? "Enter a valid email address."
-                  : undefined
-              }
-            />
-            <QuoteInput
-              id="contactPhone"
-              label="Phone"
-              type="tel"
-              required
-              autoComplete="tel"
-              value={state.contactPhone}
-              onChange={(v) => update("contactPhone", v)}
-              helper="So your cleaner can text on arrival."
-              error={
-                showErrors && state.contactPhone.trim().length === 0
-                  ? "Tell us a phone number."
-                  : undefined
-              }
-            />
-            <QuoteTextarea
-              id="notes"
-              label="Notes"
-              value={state.notes}
-              onChange={(v) => update("notes", v)}
-              helper="Optional. Access instructions, pets, allergies, anything we should know."
-              rows={3}
-            />
-
-            <div className="border border-[var(--color-neutral-100)] rounded-[var(--radius-sm)] p-6 bg-[var(--color-bone-soft)]">
-              <p
-                className="text-[var(--color-mineral)] font-medium uppercase mb-3"
-                style={{
-                  fontSize: "var(--text-label)",
-                  letterSpacing: "var(--tracking-label)",
-                }}
-              >
-                Payment
-              </p>
-              <p
-                className="text-[var(--color-ink)] font-medium mb-2"
-                style={{
-                  fontFamily: "var(--font-display-loaded), var(--font-display)",
-                  fontSize: "var(--text-heading-lg)",
-                  lineHeight: 1.2,
-                }}
-              >
-                Card input activates in the next build session.
-              </p>
-              <p
-                className="text-[var(--color-neutral-700)]"
-                style={{ fontSize: "var(--text-body)", lineHeight: 1.6 }}
-              >
-                When you tap &quot;Submit booking&quot; below, the details capture but no money moves. Stripe Payment Element integration ships in the next session — at that point this box becomes a real card-entry field with secure tokenisation.
-              </p>
-            </div>
+            {paymentStarted && clientSecret && bookingId && amountPence != null ? (
+              <StripePaymentStep
+                clientSecret={clientSecret}
+                bookingId={bookingId}
+                amountPence={amountPence}
+                customerEmail={state.contactEmail}
+                onSuccess={() => setSubmitted("booking")}
+              />
+            ) : (
+              <>
+                <QuoteInput
+                  id="contactName"
+                  label="Your name"
+                  required
+                  autoComplete="name"
+                  value={state.contactName}
+                  onChange={(v) => update("contactName", v)}
+                  error={
+                    showErrors && state.contactName.trim().length === 0
+                      ? "Tell us your name."
+                      : undefined
+                  }
+                />
+                <QuoteInput
+                  id="contactEmail"
+                  label="Email"
+                  type="email"
+                  required
+                  autoComplete="email"
+                  value={state.contactEmail}
+                  onChange={(v) => update("contactEmail", v)}
+                  helper="Booking confirmation goes here."
+                  error={
+                    showErrors && !isEmail(state.contactEmail)
+                      ? "Enter a valid email address."
+                      : undefined
+                  }
+                />
+                <QuoteInput
+                  id="contactPhone"
+                  label="Phone"
+                  type="tel"
+                  required
+                  autoComplete="tel"
+                  value={state.contactPhone}
+                  onChange={(v) => update("contactPhone", v)}
+                  helper="So your cleaner can text on arrival."
+                  error={
+                    showErrors && state.contactPhone.trim().length === 0
+                      ? "Tell us a phone number."
+                      : undefined
+                  }
+                />
+                <QuoteTextarea
+                  id="notes"
+                  label="Notes"
+                  value={state.notes}
+                  onChange={(v) => update("notes", v)}
+                  helper="Optional. Access instructions, pets, allergies, anything we should know."
+                  rows={3}
+                />
+              </>
+            )}
           </div>
         ) : null}
 
-        <div className="flex flex-col gap-4 mt-12 pt-8 border-t border-[var(--color-neutral-100)]">
-          {showPrice ? (
-            <div className="flex items-baseline justify-between gap-4">
-              <p
-                className="text-[var(--color-neutral-500)] uppercase"
-                style={{
-                  fontSize: "var(--text-label)",
-                  letterSpacing: "var(--tracking-label)",
-                }}
+        {!(step === 4 && paymentStarted) ? (
+          <div className="flex flex-col gap-4 mt-12 pt-8 border-t border-[var(--color-neutral-100)]">
+            {showPrice ? (
+              <div className="flex items-baseline justify-between gap-4">
+                <p
+                  className="text-[var(--color-neutral-500)] uppercase"
+                  style={{
+                    fontSize: "var(--text-label)",
+                    letterSpacing: "var(--tracking-label)",
+                  }}
+                >
+                  {isOneOff ? "Estimated one-off price" : "Estimated price per visit"}
+                </p>
+                <p
+                  className="font-medium text-[var(--color-ink)]"
+                  style={{
+                    fontFamily: "var(--font-display-loaded), var(--font-display)",
+                    fontSize: "var(--text-display-md)",
+                    lineHeight: 1,
+                  }}
+                >
+                  {formatGBP(pricePerVisit)}
+                </p>
+              </div>
+            ) : null}
+            {submitError ? (
+              <div
+                className="p-4 border border-[var(--color-signal)] rounded-[var(--radius-sm)] bg-[var(--color-bone)]"
+                role="alert"
               >
-                {isOneOff ? "Estimated one-off price" : "Estimated price per visit"}
-              </p>
-              <p
-                className="font-medium text-[var(--color-ink)]"
-                style={{
-                  fontFamily: "var(--font-display-loaded), var(--font-display)",
-                  fontSize: "var(--text-display-md)",
-                  lineHeight: 1,
-                }}
+                <p
+                  className="text-[var(--color-signal)] font-medium mb-1"
+                  style={{ fontSize: "var(--text-body-sm)" }}
+                >
+                  Submission failed.
+                </p>
+                <p
+                  className="text-[var(--color-neutral-700)]"
+                  style={{ fontSize: "var(--text-body-sm)", lineHeight: 1.5 }}
+                >
+                  {submitError}
+                </p>
+              </div>
+            ) : null}
+            <div className="flex items-center justify-between gap-4">
+              <button
+                type="button"
+                onClick={back}
+                disabled={step === 1 || isSubmitting}
+                className="text-[var(--color-ink)] font-medium hover:text-[var(--color-mineral)] transition-colors duration-[var(--duration-fast)] disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:text-[var(--color-ink)]"
+                style={{ fontSize: "var(--text-body)" }}
               >
-                {formatGBP(pricePerVisit)}
-              </p>
+                ← Back
+              </button>
+              {step < 4 ? (
+                <Button
+                  onClick={next}
+                  variant="primary"
+                  size="lg"
+                  className={
+                    postcodeIsOutsideLaunch && step === 1
+                      ? "opacity-30 cursor-not-allowed pointer-events-none"
+                      : ""
+                  }
+                >
+                  Next
+                </Button>
+              ) : (
+                <Button
+                  onClick={handleBookingSubmit}
+                  variant="accent"
+                  size="lg"
+                  className={isSubmitting ? "opacity-60 cursor-wait pointer-events-none" : ""}
+                >
+                  {isSubmitting ? "Setting up payment..." : "Continue to payment"}
+                </Button>
+              )}
             </div>
-          ) : null}
-          {submitError ? (
-            <div
-              className="p-4 border border-[var(--color-signal)] rounded-[var(--radius-sm)] bg-[var(--color-bone)]"
-              role="alert"
-            >
-              <p
-                className="text-[var(--color-signal)] font-medium mb-1"
-                style={{ fontSize: "var(--text-body-sm)" }}
-              >
-                Submission failed.
-              </p>
-              <p
-                className="text-[var(--color-neutral-700)]"
-                style={{ fontSize: "var(--text-body-sm)", lineHeight: 1.5 }}
-              >
-                {submitError}
-              </p>
-            </div>
-          ) : null}
-          <div className="flex items-center justify-between gap-4">
-            <button
-              type="button"
-              onClick={back}
-              disabled={step === 1 || isSubmitting}
-              className="text-[var(--color-ink)] font-medium hover:text-[var(--color-mineral)] transition-colors duration-[var(--duration-fast)] disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:text-[var(--color-ink)]"
-              style={{ fontSize: "var(--text-body)" }}
-            >
-              ← Back
-            </button>
-            {step < 4 ? (
-              <Button
-                onClick={next}
-                variant="primary"
-                size="lg"
-                className={
-                  postcodeIsOutsideLaunch && step === 1
-                    ? "opacity-30 cursor-not-allowed pointer-events-none"
-                    : ""
-                }
-              >
-                Next
-              </Button>
-            ) : (
-              <Button
-                onClick={handleBookingSubmit}
-                variant="accent"
-                size="lg"
-                className={isSubmitting ? "opacity-60 cursor-wait pointer-events-none" : ""}
-              >
-                {isSubmitting ? "Submitting..." : "Submit booking"}
-              </Button>
-            )}
           </div>
-        </div>
+        ) : null}
       </Container>
     </section>
   );
