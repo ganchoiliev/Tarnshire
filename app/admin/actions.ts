@@ -73,3 +73,27 @@ export async function updateApplicationNotesAction(
   revalidatePath("/admin");
   return { ok: true };
 }
+
+export async function updateBookingStatusAction(id: string, status: string): Promise<Result> {
+  const auth = await requireAdmin();
+  if (!auth.ok) return auth;
+  const supabase = getServiceSupabase();
+  const { error } = await supabase.from("bookings").update({ status }).eq("id", id);
+  if (error) return { ok: false, error: error.message };
+  revalidatePath("/admin");
+  return { ok: true };
+}
+
+export async function updateBookingNotesAction(id: string, notes: string): Promise<Result> {
+  const auth = await requireAdmin();
+  if (!auth.ok) return auth;
+  const supabase = getServiceSupabase();
+  const trimmed = notes.trim();
+  const { error } = await supabase
+    .from("bookings")
+    .update({ internal_notes: trimmed === "" ? null : trimmed })
+    .eq("id", id);
+  if (error) return { ok: false, error: error.message };
+  revalidatePath("/admin");
+  return { ok: true };
+}
