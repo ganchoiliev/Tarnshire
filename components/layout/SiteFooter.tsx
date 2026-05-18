@@ -48,18 +48,26 @@ export function SiteFooter() {
         <FooterColumn title="Brand" links={brandLinks} />
       </div>
 
-      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 pt-8 border-t border-[var(--color-neutral-100)]">
+      <div className="pt-8 border-t border-[var(--color-neutral-100)] flex flex-col gap-4">
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+          <p
+            className="text-[var(--color-neutral-500)] uppercase"
+            style={{ fontSize: "var(--text-caption)", letterSpacing: "var(--tracking-caption)" }}
+          >
+            © {year} Tarnshire · Manchester · Greater Manchester
+          </p>
+          <p
+            className="text-[var(--color-neutral-500)] uppercase"
+            style={{ fontSize: "var(--text-label)", letterSpacing: "var(--tracking-label)" }}
+          >
+            DBS-checked · Fully insured · Same-cleaner promise
+          </p>
+        </div>
         <p
-          className="text-[var(--color-neutral-500)] uppercase"
-          style={{ fontSize: "var(--text-caption)", letterSpacing: "var(--tracking-caption)" }}
+          className="text-[var(--color-neutral-500)] max-w-none"
+          style={{ fontSize: "var(--text-caption)", lineHeight: 1.55 }}
         >
-          © {year} Tarnshire · Manchester · Greater Manchester
-        </p>
-        <p
-          className="text-[var(--color-neutral-500)] uppercase"
-          style={{ fontSize: "var(--text-label)", letterSpacing: "var(--tracking-label)" }}
-        >
-          DBS-checked · Fully insured · Same-cleaner promise
+          Tarnshire is a trading name of Brushly Ltd, a company registered in England and Wales (Company No. 17056861). Registered office: 18 Howard Road, Reigate, RH2 7JE.
         </p>
       </div>
     </footer>

@@ -100,12 +100,20 @@ export default function ContactPage() {
                 </li>
               ))}
             </ul>
-            <p
-              className="mt-12 text-[var(--color-neutral-500)] uppercase"
-              style={{ fontSize: "var(--text-caption)", letterSpacing: "var(--tracking-caption)" }}
-            >
-              Tarnshire · Manchester · Greater Manchester · United Kingdom
-            </p>
+            <div className="mt-12 flex flex-col gap-3">
+              <p
+                className="text-[var(--color-neutral-500)] uppercase"
+                style={{ fontSize: "var(--text-caption)", letterSpacing: "var(--tracking-caption)" }}
+              >
+                Tarnshire · Manchester · Greater Manchester · United Kingdom
+              </p>
+              <p
+                className="text-[var(--color-neutral-500)]"
+                style={{ fontSize: "var(--text-caption)", lineHeight: 1.55 }}
+              >
+                Tarnshire is a trading name of Brushly Ltd, a company registered in England and Wales (Company No. 17056861). Registered office: 18 Howard Road, Reigate, RH2 7JE.
+              </p>
+            </div>
           </Container>
         </section>
       </main>
