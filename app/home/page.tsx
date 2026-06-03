@@ -1,42 +1,9 @@
-import type { Metadata } from "next";
-import { SiteHeader } from "@/components/layout/SiteHeader";
-import { SiteFooter } from "@/components/layout/SiteFooter";
-import { HomeHero } from "@/components/home/HomeHero";
-import { ServicesRow } from "@/components/home/ServicesRow";
-import { PricingSnapshot } from "@/components/home/PricingSnapshot";
-import { VettingChecklist } from "@/components/home/VettingChecklist";
-import { CleanerShowcase } from "@/components/home/CleanerShowcase";
-import { LaunchOffer } from "@/components/home/LaunchOffer";
-import { EditorialPullQuote } from "@/components/home/EditorialPullQuote";
-import { FinalCTA } from "@/components/home/FinalCTA";
+import { permanentRedirect } from "next/navigation";
 
-export const metadata: Metadata = {
-  title: "For Home — Premium recurring housekeeping in M20, M21, M14",
-  description:
-    "Premium recurring housekeeping in Didsbury, Chorlton, and Withington. Same cleaner every visit. DBS-checked, insured, book your first clean in two clicks.",
-  openGraph: {
-    title: "Tarnshire For Home — Premium recurring housekeeping in Manchester",
-    description:
-      "Same cleaner every visit. Vetted, insured, bookable across M20, M21, and M14.",
-    images: ["/img/1-3.jpg"],
-  },
-};
-
+// The domestic landing now lives at the apex ("/"). "/home" is collapsed into it
+// with a permanent (308) redirect so only one URL serves the landing — no
+// duplicate content. The /home/book and /home/deep-clean subroutes are
+// separate route segments and are unaffected by this redirect.
 export default function ForHomePage() {
-  return (
-    <>
-      <SiteHeader />
-      <main>
-        <HomeHero />
-        <ServicesRow />
-        <PricingSnapshot />
-        <VettingChecklist />
-        <CleanerShowcase />
-        <LaunchOffer />
-        <EditorialPullQuote />
-        <FinalCTA />
-      </main>
-      <SiteFooter />
-    </>
-  );
+  permanentRedirect("/");
 }

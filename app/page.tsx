@@ -1,8 +1,14 @@
 import type { Metadata } from "next";
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { SiteFooter } from "@/components/layout/SiteFooter";
-import { RouteSplit } from "@/components/home/RouteSplit";
-import { TrustStrip } from "@/components/home/TrustStrip";
+import { HomeHero } from "@/components/home/HomeHero";
+import { ServicesRow } from "@/components/home/ServicesRow";
+import { PricingSnapshot } from "@/components/home/PricingSnapshot";
+import { VettingChecklist } from "@/components/home/VettingChecklist";
+import { CleanerShowcase } from "@/components/home/CleanerShowcase";
+import { LaunchOffer } from "@/components/home/LaunchOffer";
+import { EditorialPullQuote } from "@/components/home/EditorialPullQuote";
+import { FinalCTA } from "@/components/home/FinalCTA";
 
 export const metadata: Metadata = {
   title: "Tarnshire · Premium domestic cleaning in Greater Manchester",
@@ -21,8 +27,14 @@ export default function HomePage() {
     <>
       <SiteHeader />
       <main>
-        <RouteSplit />
-        <TrustStrip />
+        <HomeHero />
+        <ServicesRow />
+        <PricingSnapshot />
+        <VettingChecklist />
+        <CleanerShowcase />
+        <LaunchOffer />
+        <EditorialPullQuote />
+        <FinalCTA />
       </main>
       <SiteFooter />
     </>

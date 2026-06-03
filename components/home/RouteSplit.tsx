@@ -13,7 +13,7 @@ export function RouteSplit() {
         headline="A quiet hour returned to your week."
         lede="Premium recurring housekeeping in M20, M21 and M14. Same cleaner every visit. Vetted, insured, and yours to keep."
         ctaLabel="Book your first clean"
-        ctaHref="/home"
+        ctaHref="/"
         metaPrimary="From £42"
         metaSecondary="two cleaners, one hour · transparent pricing · cancel anytime"
         imageSrc={IMAGES.splitHome}

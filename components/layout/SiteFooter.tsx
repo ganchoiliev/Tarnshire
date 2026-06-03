@@ -4,7 +4,7 @@ import { Wordmark } from "@/components/brand/Wordmark";
 type FooterLink = { href: string; label: string };
 
 const homeLinks: FooterLink[] = [
-  { href: "/home", label: "For Home" },
+  { href: "/", label: "For Home" },
   { href: "/home/services", label: "Services" },
   { href: "/home/deep-clean", label: "Deep Clean" },
   { href: "/home/pricing", label: "Pricing" },
