@@ -6,7 +6,7 @@ const checks: Check[] = [
   {
     number: "01",
     title: "DBS background-checked",
-    body: "Every contractor verified through the UK Disclosure and Barring Service before first visit.",
+    body: "Every cleaner verified through the UK Disclosure and Barring Service before first visit.",
   },
   {
     number: "02",
@@ -26,7 +26,7 @@ const checks: Check[] = [
   {
     number: "05",
     title: "In-person trial clean",
-    body: "Every contractor completes a paid trial clean with our standards lead before joining the network.",
+    body: "Every cleaner completes a paid trial clean with our standards lead before joining the network.",
   },
 ];
 
@@ -59,7 +59,7 @@ export function VettingChecklist() {
             className="text-[var(--color-neutral-700)] max-w-[520px]"
             style={{ fontSize: "var(--text-body-lg)", lineHeight: 1.55 }}
           >
-            Every Tarnshire contractor passes all five before their first paid
+            Every Tarnshire cleaner passes all five before their first paid
             clean. Documented, dated, on file.
           </p>
         </div>

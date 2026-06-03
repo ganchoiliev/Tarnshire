@@ -34,7 +34,7 @@ const methods: ContactMethod[] = [
     label: "Phone line",
     primary: "Opens Q3 2026",
     secondary:
-      "Phone support launches alongside our first contractor cohort. Email is the fastest route until then.",
+      "Phone support is on the way. Email is the fastest route to reach us today.",
   },
 ];
 

@@ -3,13 +3,13 @@ import { SiteHeader } from "@/components/layout/SiteHeader";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { PageHero } from "@/components/shared/PageHero";
 import { ComingSoon } from "@/components/shared/ComingSoon";
-import { CleanerShowcase } from "@/components/home/CleanerShowcase";
+import { CleanerCoverage } from "@/components/home/CleanerCoverage";
 import { VettingChecklist } from "@/components/home/VettingChecklist";
 
 export const metadata: Metadata = {
   title: "Our Cleaners — Tarnshire",
   description:
-    "Every Tarnshire cleaner is DBS-checked, reference-verified, insured, and matched to a single recurring customer. This page goes live with portraits when our first contractors hire.",
+    "Tarnshire's cleaners are vetted, insured, independent professionals serving M20, M21 and M14 now, each matched to a single recurring customer. Real names and portraits appear only as each cleaner consents to photography.",
 };
 
 export default function OurCleanersPage() {
@@ -20,16 +20,16 @@ export default function OurCleanersPage() {
         <PageHero
           eyebrow="Our Cleaners"
           headline="The people behind every visit."
-          lede="This page goes live with named portraits when our first contractors complete vetting. Until then: a recruitment pitch and an honest account of how we hire."
+          lede="Vetted, insured, independent professionals cleaning homes across Didsbury, Chorlton, and Withington now. Real names and portraits appear here only as each cleaner consents to photography. We never invent faces or profiles."
         />
         <ComingSoon
-          label="Activates with first hires"
+          label="Real people only"
           heading="No fictional faces."
-          body="Tarnshire does not synthesise contractor portraits or invent names to fill this page. The brand's same-cleaner promise depends on every face here being a real person you can actually book. Until our first cleaners have completed vetting and consented to portrait photography, this page surfaces our standards and our open positions instead."
-          activatesWhen="Estimated activation: Q3 2026"
+          body="Our cleaners are real, vetted, and working now. We will not fill this page with synthesised portraits or invented names. Each cleaner's photo and name appear here only once they have consented to be photographed, so every face you see is someone you can actually book."
+          activatesWhen="Portraits publish as each cleaner consents to photography."
         />
         <VettingChecklist />
-        <CleanerShowcase />
+        <CleanerCoverage />
       </main>
       <SiteFooter />
     </>

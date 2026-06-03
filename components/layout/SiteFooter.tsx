@@ -16,7 +16,6 @@ const brandLinks: FooterLink[] = [
   { href: "/our-cleaners", label: "Our Cleaners" },
   { href: "/the-almanac", label: "The Almanac" },
   { href: "/contact", label: "Contact" },
-  { href: "/careers", label: "Careers" },
   { href: "/terms", label: "Terms" },
   { href: "/privacy", label: "Privacy" },
   { href: "/cookies", label: "Cookies" },
