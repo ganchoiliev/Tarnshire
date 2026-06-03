@@ -8,6 +8,7 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
 import { z } from "https://esm.sh/zod@3.23.8";
 
 const BookingRequestSchema = z.object({
+  serviceType: z.enum(["standard", "deep_clean"]).default("standard"),
   postcode: z.string().min(5).max(20),
   bedrooms: z.enum(["studio", "1", "2", "3", "4", "5_plus"]),
   bathrooms: z.enum(["1", "2", "3", "4_plus"]),
@@ -30,7 +31,24 @@ const jsonHeaders = { ...corsHeaders, "Content-Type": "application/json" };
 
 const LAUNCH_POSTCODES = ["M20", "M21", "M14"];
 
-function calculatePricePence(bedrooms: string, frequency: string): number {
+// Mirrored in lib/booking.ts (calculatePricePerVisit).
+// BOTH MUST MATCH — this Edge Function copy is the source of truth for the Stripe charge.
+function calculatePricePence(
+  serviceType: "standard" | "deep_clean",
+  bedrooms: string,
+  frequency: string,
+): number {
+  if (serviceType === "deep_clean") {
+    const deepCleanBase: Record<string, number> = {
+      studio: 10000,
+      "1": 12000,
+      "2": 12000,
+      "3": 15000,
+      "4": 19000,
+      "5_plus": 23000,
+    };
+    return deepCleanBase[bedrooms] ?? 0;
+  }
   const base: Record<string, number> = {
     studio: 3500,
     "1": 4200,
@@ -139,11 +157,12 @@ serve(async (req: Request) => {
     auth: { autoRefreshToken: false, persistSession: false },
   });
 
-  const pricePence = calculatePricePence(data.bedrooms, data.frequency);
+  const pricePence = calculatePricePence(data.serviceType, data.bedrooms, data.frequency);
 
   const { data: row, error: insertErr } = await supabase
     .from("bookings")
     .insert({
+      service_type: data.serviceType,
       postcode: data.postcode,
       bedrooms: data.bedrooms,
       bathrooms: data.bathrooms,
@@ -171,13 +190,15 @@ serve(async (req: Request) => {
   }
 
   try {
+    const serviceLabel = data.serviceType === "deep_clean" ? "Deep Clean" : "Standard Clean";
     const intent = await createStripePaymentIntent({
       amount: pricePence,
       currency: "gbp",
-      description: `Tarnshire booking — ${data.bedrooms} bed ${data.frequency} clean (${outward})`,
+      description: `Tarnshire ${serviceLabel} — ${data.bedrooms} bed ${data.frequency} (${outward})`,
       receiptEmail: data.contactEmail,
       metadata: {
         booking_id: row.id,
+        service_type: data.serviceType,
         postcode: data.postcode,
         contact_name: data.contactName,
       },

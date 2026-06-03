@@ -45,16 +45,25 @@ export function HomeHero() {
             Premium recurring housekeeping in Didsbury, Chorlton, and Withington.
             Vetted, insured, same cleaner every visit. A weekly hour returned to your week.
           </p>
-          <div className="flex flex-wrap items-center gap-6">
-            <Button href="/home/book" variant="accent" size="lg">
-              Book your first clean
-            </Button>
+          <div className="flex flex-col items-start gap-4">
+            <div className="flex flex-wrap items-center gap-6">
+              <Button href="/home/book" variant="accent" size="lg">
+                Book your first clean
+              </Button>
+              <Link
+                href="/home/pricing"
+                className="text-[var(--color-ink)] hover:text-[var(--color-mineral)] transition-colors duration-[var(--duration-fast)] font-medium underline underline-offset-4 decoration-[0.5px]"
+                style={{ fontSize: "var(--text-body)" }}
+              >
+                See full pricing →
+              </Link>
+            </div>
             <Link
-              href="/home/pricing"
-              className="text-[var(--color-ink)] hover:text-[var(--color-mineral)] transition-colors duration-[var(--duration-fast)] font-medium underline underline-offset-4 decoration-[0.5px]"
-              style={{ fontSize: "var(--text-body)" }}
+              href="/home/deep-clean"
+              className="text-[var(--color-neutral-500)] hover:text-[var(--color-mineral)] transition-colors duration-[var(--duration-fast)] underline underline-offset-4 decoration-[0.5px]"
+              style={{ fontSize: "var(--text-body-sm)" }}
             >
-              See full pricing →
+              Need a one-off deep clean instead? →
             </Link>
           </div>
         </div>

@@ -31,7 +31,7 @@ export default async function AdminDashboard() {
     supabase
       .from("bookings")
       .select(
-        "id, created_at, status, postcode, bedrooms, frequency, contact_name, contact_email, contact_phone, preferred_date, preferred_time_slot, assigned_contractor_id, price_per_visit_pence, internal_notes",
+        "id, created_at, status, service_type, postcode, bedrooms, frequency, contact_name, contact_email, contact_phone, preferred_date, preferred_time_slot, assigned_contractor_id, price_per_visit_pence, internal_notes",
       )
       .order("created_at", { ascending: false })
       .limit(25),

@@ -12,6 +12,7 @@ import { StripePaymentStep } from "./StripePaymentStep";
 import { getSupabase } from "@/lib/supabase/browser";
 import {
   type BookingState,
+  type ServiceType,
   initialBookingState,
   type StepId,
   STEP_LABELS,
@@ -23,6 +24,7 @@ import {
   isLaunchPostcode,
   calculatePricePerVisit,
   formatGBP,
+  serviceTypeLabel,
 } from "@/lib/booking";
 
 function isEmail(v: string): boolean {
@@ -53,9 +55,17 @@ function validateStep(state: BookingState, step: StepId): boolean {
   }
 }
 
-export function BookingFlow() {
+type BookingFlowProps = {
+  initialServiceType?: ServiceType;
+};
+
+export function BookingFlow({ initialServiceType = "standard" }: BookingFlowProps = {}) {
   const [step, setStep] = useState<StepId>(1);
-  const [state, setState] = useState<BookingState>(initialBookingState);
+  const [state, setState] = useState<BookingState>({
+    ...initialBookingState,
+    serviceType: initialServiceType,
+    frequency: initialServiceType === "deep_clean" ? "one_off" : "",
+  });
   const [attemptedAdvance, setAttemptedAdvance] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState<null | "booking" | "waitlist">(null);
@@ -189,13 +199,23 @@ export function BookingFlow() {
               letterSpacing: "var(--tracking-display)",
             }}
           >
-            Booking confirmed. Payment received.
+            {state.serviceType === "deep_clean"
+              ? "Deep clean confirmed. Payment received."
+              : "Booking confirmed. Payment received."}
           </h2>
           <p
             className="text-[var(--color-neutral-700)] mx-auto max-w-[560px] mb-6"
             style={{ fontSize: "var(--text-body-lg)", lineHeight: 1.6 }}
           >
-            A confirmation email is on its way to <strong>{state.contactEmail}</strong>. Our operations lead will contact you within 24 working hours to confirm which cleaner will attend on {state.preferredDate}.
+            {state.serviceType === "deep_clean" ? (
+              <>
+                A confirmation email is on its way to <strong>{state.contactEmail}</strong>. Our operations lead will contact you within 24 working hours to confirm whether one or two cleaners will attend on {state.preferredDate}.
+              </>
+            ) : (
+              <>
+                A confirmation email is on its way to <strong>{state.contactEmail}</strong>. Our operations lead will contact you within 24 working hours to confirm which cleaner will attend on {state.preferredDate}.
+              </>
+            )}
           </p>
           {bookingId ? (
             <p
@@ -211,8 +231,9 @@ export function BookingFlow() {
   }
 
   const showPrice = step >= 2 && !!state.bedrooms && !!state.frequency;
-  const pricePerVisit = showPrice ? calculatePricePerVisit(state.bedrooms, state.frequency) : 0;
+  const pricePerVisit = showPrice ? calculatePricePerVisit(state) : 0;
   const isOneOff = state.frequency === "one_off";
+  const isDeepClean = state.serviceType === "deep_clean";
 
   const showErrors = attemptedAdvance && !validateStep(state, step);
 
@@ -355,7 +376,7 @@ export function BookingFlow() {
                 letterSpacing: "var(--tracking-heading)",
               }}
             >
-              Tell us about your home.
+              {isDeepClean ? "Tell us about the home." : "Tell us about your home."}
             </h2>
             <QuoteRadioGroup
               name="bedrooms"
@@ -382,17 +403,37 @@ export function BookingFlow() {
               value={state.additionalRooms}
               onChange={(v) => update("additionalRooms", v)}
             />
-            <QuoteRadioGroup
-              name="frequency"
-              label="Frequency"
-              options={FREQUENCY_OPTIONS}
-              required
-              value={state.frequency}
-              onChange={(v) => update("frequency", v)}
-              error={
-                showErrors && !state.frequency ? "Pick how often you want a visit." : undefined
-              }
-            />
+            {isDeepClean ? (
+              <div className="border border-[var(--color-neutral-100)] rounded-[var(--radius-sm)] p-6 bg-[var(--color-mineral-soft)]">
+                <p
+                  className="text-[var(--color-mineral-deep)] font-medium uppercase mb-2"
+                  style={{
+                    fontSize: "var(--text-label)",
+                    letterSpacing: "var(--tracking-label)",
+                  }}
+                >
+                  One-off deep clean
+                </p>
+                <p
+                  className="text-[var(--color-ink)]"
+                  style={{ fontSize: "var(--text-body)", lineHeight: 1.55 }}
+                >
+                  4-hour minimum visit. One cleaner for ~4 hours or two cleaners for ~2 hours, depending on availability — we&apos;ll confirm which within 24 working hours.
+                </p>
+              </div>
+            ) : (
+              <QuoteRadioGroup
+                name="frequency"
+                label="Frequency"
+                options={FREQUENCY_OPTIONS}
+                required
+                value={state.frequency}
+                onChange={(v) => update("frequency", v)}
+                error={
+                  showErrors && !state.frequency ? "Pick how often you want a visit." : undefined
+                }
+              />
+            )}
           </div>
         ) : null}
 
@@ -413,9 +454,11 @@ export function BookingFlow() {
               className="text-[var(--color-neutral-700)]"
               style={{ fontSize: "var(--text-body)", lineHeight: 1.55 }}
             >
-              {isOneOff
-                ? "Pick your preferred date for the one-off clean. We'll confirm a specific time within 24 working hours."
-                : "Pick your preferred date for your first visit. Future visits land on the same day each week."}
+              {isDeepClean
+                ? "Pick your preferred date for the deep clean. We'll confirm a specific time within 24 working hours."
+                : isOneOff
+                  ? "Pick your preferred date for the one-off clean. We'll confirm a specific time within 24 working hours."
+                  : "Pick your preferred date for your first visit. Future visits land on the same day each week."}
             </p>
             <QuoteDateInput
               id="preferredDate"
@@ -523,15 +566,27 @@ export function BookingFlow() {
           <div className="flex flex-col gap-4 mt-12 pt-8 border-t border-[var(--color-neutral-100)]">
             {showPrice ? (
               <div className="flex items-baseline justify-between gap-4">
-                <p
-                  className="text-[var(--color-neutral-500)] uppercase"
-                  style={{
-                    fontSize: "var(--text-label)",
-                    letterSpacing: "var(--tracking-label)",
-                  }}
-                >
-                  {isOneOff ? "Estimated one-off price" : "Estimated price per visit"}
-                </p>
+                <div>
+                  <p
+                    className="text-[var(--color-mineral)] font-medium uppercase"
+                    style={{
+                      fontSize: "var(--text-label)",
+                      letterSpacing: "var(--tracking-label)",
+                    }}
+                  >
+                    {serviceTypeLabel(state.serviceType)}
+                  </p>
+                  <p
+                    className="text-[var(--color-neutral-500)]"
+                    style={{ fontSize: "var(--text-caption)" }}
+                  >
+                    {isDeepClean
+                      ? "4-hour minimum visit"
+                      : isOneOff
+                        ? "Estimated one-off price"
+                        : "Estimated price per visit"}
+                  </p>
+                </div>
                 <p
                   className="font-medium text-[var(--color-ink)]"
                   style={{

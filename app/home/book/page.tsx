@@ -3,6 +3,7 @@ import { SiteHeader } from "@/components/layout/SiteHeader";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { PageHero } from "@/components/shared/PageHero";
 import { BookingFlow } from "@/components/home/book/BookingFlow";
+import type { ServiceType } from "@/lib/booking";
 
 export const metadata: Metadata = {
   title: "Book your first clean · Tarnshire",
@@ -16,17 +17,32 @@ export const metadata: Metadata = {
   },
 };
 
-export default function BookingPage() {
+type SearchParams = Promise<{ [key: string]: string | string[] | undefined }>;
+
+export default async function BookingPage({
+  searchParams,
+}: {
+  searchParams: SearchParams;
+}) {
+  const sp = await searchParams;
+  const rawService = Array.isArray(sp.service) ? sp.service[0] : sp.service;
+  const serviceType: ServiceType = rawService === "deep_clean" ? "deep_clean" : "standard";
+  const isDeepClean = serviceType === "deep_clean";
+
   return (
     <>
       <SiteHeader />
       <main>
         <PageHero
-          eyebrow="Book your first clean"
-          headline="Four steps. Then we visit."
-          lede="Tell us your postcode, your home, when we should visit, and where to send the confirmation. Estimated price updates as you go. We respond within 24 working hours to confirm the cleaner."
+          eyebrow={isDeepClean ? "Book a deep clean" : "Book your first clean"}
+          headline={isDeepClean ? "Four hours. Top to bottom." : "Four steps. Then we visit."}
+          lede={
+            isDeepClean
+              ? "A one-off, intensive clean for move-in, move-out, post-renovation, or whenever your home needs the deepest possible reset. 4-hour minimum visit. Estimated price updates as you go."
+              : "Tell us your postcode, your home, when we should visit, and where to send the confirmation. Estimated price updates as you go. We respond within 24 working hours to confirm the cleaner."
+          }
         />
-        <BookingFlow />
+        <BookingFlow initialServiceType={serviceType} />
       </main>
       <SiteFooter />
     </>

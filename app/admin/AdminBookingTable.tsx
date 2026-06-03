@@ -37,6 +37,7 @@ type Booking = {
   id: string;
   created_at: string;
   status: string;
+  service_type: string;
   postcode: string;
   bedrooms: string;
   frequency: string;
@@ -96,6 +97,12 @@ export function AdminBookingTable({ bookings }: { bookings: Booking[] }) {
               className="text-left px-4 py-3 text-[var(--color-neutral-500)] font-medium uppercase"
               style={{ fontSize: "var(--text-label)", letterSpacing: "var(--tracking-label)" }}
             >
+              Service
+            </th>
+            <th
+              className="text-left px-4 py-3 text-[var(--color-neutral-500)] font-medium uppercase"
+              style={{ fontSize: "var(--text-label)", letterSpacing: "var(--tracking-label)" }}
+            >
               Property
             </th>
             <th
@@ -148,6 +155,25 @@ export function AdminBookingTable({ bookings }: { bookings: Booking[] }) {
                 >
                   {b.contact_phone}
                 </div>
+              </td>
+              <td className="px-4 py-3 whitespace-nowrap">
+                <span
+                  className="inline-block px-2 py-1 rounded uppercase font-medium"
+                  style={{
+                    fontSize: "10px",
+                    letterSpacing: "0.08em",
+                    backgroundColor:
+                      b.service_type === "deep_clean"
+                        ? "var(--color-mineral)"
+                        : "var(--color-bone-soft)",
+                    color:
+                      b.service_type === "deep_clean"
+                        ? "var(--color-bone)"
+                        : "var(--color-neutral-700)",
+                  }}
+                >
+                  {b.service_type === "deep_clean" ? "Deep" : "Standard"}
+                </span>
               </td>
               <td className="px-4 py-3 text-[var(--color-neutral-700)] whitespace-nowrap">
                 <div>{BEDROOM_LABELS[b.bedrooms] ?? b.bedrooms}</div>

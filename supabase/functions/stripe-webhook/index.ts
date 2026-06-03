@@ -139,20 +139,25 @@ serve(async (req: Request) => {
         .eq("id", bookingId);
 
       if (resendKey) {
+        const isDeepClean = booking.service_type === "deep_clean";
+        const opsSubject = `${isDeepClean ? "[DEEP CLEAN] " : ""}New booking confirmed — ${booking.contact_name} (${booking.postcode.slice(0, 3)})`;
+        const customerSubject = isDeepClean
+          ? "Your Tarnshire Deep Clean is confirmed"
+          : "Your Tarnshire booking is confirmed";
         try {
           await Promise.all([
             sendEmail(resendKey, {
               from: fromEmail,
               to: [opsEmail],
               reply_to: booking.contact_email,
-              subject: `New booking confirmed — ${booking.contact_name} (${booking.postcode.slice(0, 3)})`,
+              subject: opsSubject,
               html: buildOpsEmail(booking),
             }),
             sendEmail(resendKey, {
               from: fromEmail,
               to: [booking.contact_email],
               reply_to: "hello@tarnshire.co.uk",
-              subject: "Your Tarnshire booking is confirmed",
+              subject: customerSubject,
               html: buildCustomerEmail(booking),
             }),
           ]);
@@ -205,11 +210,16 @@ serve(async (req: Request) => {
 
 function buildOpsEmail(booking: any): string {
   const amount = (booking.amount_charged_pence / 100).toFixed(2);
+  const serviceLabel =
+    booking.service_type === "deep_clean"
+      ? "Tarnshire Deep Clean (4-hour minimum)"
+      : "Standard Clean";
   return `<!DOCTYPE html><html><body style="margin:0; padding:32px 16px; background:#F7F4EE; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif; color:#15171A;">
     <div style="max-width:560px; margin:0 auto;">
       <p style="font-size:11px; letter-spacing:0.08em; text-transform:uppercase; color:#0E5E5A; margin:0 0 16px;">Booking confirmed — payment received</p>
       <h1 style="font-family:Georgia,serif; font-size:28px; line-height:1.15; margin:0 0 24px;">£${amount} · ${escapeHtml(booking.contact_name)}</h1>
       <table style="width:100%; border-collapse:collapse;">
+        <tr><td style="padding:8px 0; border-bottom:1px solid #E5E2DC; font-size:11px; text-transform:uppercase; color:#6F6E6B;">Service</td><td style="padding:8px 0; border-bottom:1px solid #E5E2DC; font-size:14px; text-align:right; font-weight:600;">${serviceLabel}</td></tr>
         <tr><td style="padding:8px 0; border-bottom:1px solid #E5E2DC; font-size:11px; text-transform:uppercase; color:#6F6E6B;">Email</td><td style="padding:8px 0; border-bottom:1px solid #E5E2DC; font-size:14px; text-align:right;"><a href="mailto:${escapeHtml(booking.contact_email)}" style="color:#15171A;">${escapeHtml(booking.contact_email)}</a></td></tr>
         <tr><td style="padding:8px 0; border-bottom:1px solid #E5E2DC; font-size:11px; text-transform:uppercase; color:#6F6E6B;">Phone</td><td style="padding:8px 0; border-bottom:1px solid #E5E2DC; font-size:14px; text-align:right;">${escapeHtml(booking.contact_phone)}</td></tr>
         <tr><td style="padding:8px 0; border-bottom:1px solid #E5E2DC; font-size:11px; text-transform:uppercase; color:#6F6E6B;">Postcode</td><td style="padding:8px 0; border-bottom:1px solid #E5E2DC; font-size:14px; text-align:right;">${escapeHtml(booking.postcode)}</td></tr>
@@ -219,19 +229,35 @@ function buildOpsEmail(booking: any): string {
       </table>
       ${booking.notes ? `<h3 style="font-family:Georgia,serif; font-size:16px; margin:24px 0 8px;">Customer notes</h3><p style="font-size:14px; line-height:1.55; margin:0; color:#3A3A3A; white-space:pre-wrap;">${escapeHtml(booking.notes)}</p>` : ""}
       <p style="font-size:11px; text-transform:uppercase; color:#6F6E6B; margin:32px 0 0;">Reference: ${booking.id}</p>
-      <p style="font-size:14px; color:#3A3A3A; margin:16px 0 0;">Assign a cleaner via /admin and confirm the visit time with the customer within 24 working hours.</p>
+      <p style="font-size:14px; color:#3A3A3A; margin:16px 0 0;">${booking.service_type === "deep_clean" ? "Confirm whether one or two cleaners will attend, then notify the customer within 24 working hours." : "Assign a cleaner via /admin and confirm the visit time with the customer within 24 working hours."}</p>
     </div></body></html>`;
 }
 
 function buildCustomerEmail(booking: any): string {
   const amount = (booking.amount_charged_pence / 100).toFixed(2);
   const firstName = booking.contact_name.split(" ")[0];
+  const isDeepClean = booking.service_type === "deep_clean";
+  const serviceLabel = isDeepClean
+    ? "Tarnshire Deep Clean (4-hour minimum)"
+    : "Standard Clean";
+  const heading = isDeepClean
+    ? `Thanks, ${escapeHtml(firstName)}. Your deep clean is confirmed.`
+    : `Thanks, ${escapeHtml(firstName)}. Your booking is confirmed.`;
+  const visitLine = isDeepClean
+    ? `Payment of <strong>£${amount}</strong> received. Your deep clean is scheduled for <strong>${escapeHtml(booking.preferred_date)}, ${escapeHtml(booking.preferred_time_slot)}</strong>.`
+    : `Payment of <strong>£${amount}</strong> received. Your first visit is scheduled for <strong>${escapeHtml(booking.preferred_date)}, ${escapeHtml(booking.preferred_time_slot)}</strong>.`;
+  const followupLine = isDeepClean
+    ? `We'll be in touch within 24 working hours to confirm whether one cleaner will attend for around 4 hours, or two cleaners for around 2 hours. You'll receive their name and a phone number in case anything changes on the day.`
+    : `We'll be in touch within 24 working hours to confirm which cleaner will attend. You'll receive their name and a phone number in case anything changes on the day.`;
   return `<!DOCTYPE html><html><body style="margin:0; padding:48px 16px; background:#F7F4EE; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif; color:#15171A;">
     <div style="max-width:520px; margin:0 auto;">
       <p style="font-size:11px; letter-spacing:0.18em; text-transform:uppercase; font-weight:500; margin:0 0 32px;">Tarnshire</p>
-      <h1 style="font-family:Georgia,serif; font-size:32px; line-height:1.1; margin:0 0 24px;">Thanks, ${escapeHtml(firstName)}. Your booking is confirmed.</h1>
-      <p style="font-size:16px; line-height:1.6; color:#3A3A3A; margin:0 0 20px;">Payment of <strong>£${amount}</strong> received. Your first visit is scheduled for <strong>${escapeHtml(booking.preferred_date)}, ${escapeHtml(booking.preferred_time_slot)}</strong>.</p>
-      <p style="font-size:16px; line-height:1.6; color:#3A3A3A; margin:0 0 20px;">We'll be in touch within 24 working hours to confirm which cleaner will attend. You'll receive their name and a phone number in case anything changes on the day.</p>
+      <h1 style="font-family:Georgia,serif; font-size:32px; line-height:1.1; margin:0 0 24px;">${heading}</h1>
+      <table style="width:100%; border-collapse:collapse; margin:0 0 24px;">
+        <tr><td style="padding:8px 0; border-bottom:1px solid #E5E2DC; font-size:14px; color:#6F6E6B;">Service</td><td style="padding:8px 0; border-bottom:1px solid #E5E2DC; font-size:14px; color:#15171A; font-weight:600; text-align:right;">${serviceLabel}</td></tr>
+      </table>
+      <p style="font-size:16px; line-height:1.6; color:#3A3A3A; margin:0 0 20px;">${visitLine}</p>
+      <p style="font-size:16px; line-height:1.6; color:#3A3A3A; margin:0 0 20px;">${followupLine}</p>
       <p style="font-size:16px; line-height:1.6; color:#3A3A3A; margin:0 0 32px;">If anything in the booking needs changing, just reply to this email.</p>
       <p style="font-size:11px; letter-spacing:0.04em; text-transform:uppercase; color:#6F6E6B; margin:32px 0 0;">Reference: ${booking.id}</p>
       <hr style="border:none; border-top:1px solid #E5E2DC; margin:32px 0 24px;" />

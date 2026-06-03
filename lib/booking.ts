@@ -1,4 +1,7 @@
+export type ServiceType = "standard" | "deep_clean";
+
 export type BookingState = {
+  serviceType: ServiceType;
   postcode: string;
   waitlistEmail: string;
   bedrooms: string;
@@ -14,6 +17,7 @@ export type BookingState = {
 };
 
 export const initialBookingState: BookingState = {
+  serviceType: "standard",
   postcode: "",
   waitlistEmail: "",
   bedrooms: "",
@@ -91,7 +95,23 @@ export const TIME_SLOT_OPTIONS = [
   { value: "either", label: "Either works" },
 ];
 
-export function calculatePricePerVisit(bedrooms: string, frequency: string): number {
+/**
+ * Calculate price per visit in GBP.
+ * Mirrored in supabase/functions/create-booking/index.ts (calculatePricePence).
+ * BOTH MUST MATCH — Stripe charge derives from the Edge Function copy.
+ */
+export function calculatePricePerVisit(state: BookingState): number {
+  if (state.serviceType === "deep_clean") {
+    const deepCleanBase: Record<string, number> = {
+      studio: 100,
+      "1": 120,
+      "2": 120,
+      "3": 150,
+      "4": 190,
+      "5_plus": 230,
+    };
+    return deepCleanBase[state.bedrooms] ?? 0;
+  }
   const base: Record<string, number> = {
     studio: 35,
     "1": 42,
@@ -106,9 +126,13 @@ export function calculatePricePerVisit(bedrooms: string, frequency: string): num
     monthly: 1.05,
     one_off: 1.5,
   };
-  const b = base[bedrooms] ?? 42;
-  const a = adjust[frequency] ?? 1.0;
+  const b = base[state.bedrooms] ?? 42;
+  const a = adjust[state.frequency] ?? 1.0;
   return Math.round(b * a);
+}
+
+export function serviceTypeLabel(serviceType: ServiceType): string {
+  return serviceType === "deep_clean" ? "Tarnshire Deep Clean" : "Standard Clean";
 }
 
 export function formatGBP(amount: number): string {
