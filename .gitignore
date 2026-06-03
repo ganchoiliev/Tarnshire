@@ -43,3 +43,6 @@ next-env.d.ts
 
 # claude code local config (per-clone tooling, not source)
 .claude/
+
+# supabase (local CLI link state, not source)
+/supabase/.temp/
