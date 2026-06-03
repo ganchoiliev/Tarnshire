@@ -60,7 +60,7 @@ export function HomeHero() {
   const pieceProps = reduceMotion ? {} : { variants: piece };
 
   return (
-    <section className="relative overflow-hidden border-b border-[var(--color-neutral-100)] py-20 md:py-32 lg:py-40">
+    <section id="hero" className="relative overflow-hidden border-b border-[var(--color-neutral-100)] py-20 md:py-32 lg:py-40">
       <motion.div
         aria-hidden
         className="absolute inset-0 pointer-events-none"
@@ -98,6 +98,29 @@ export function HomeHero() {
             Vetted, insured, same cleaner every visit. A weekly hour returned to your week.
           </motion.p>
           <motion.div className="flex flex-col items-start gap-4" {...pieceProps}>
+            <Link
+              href="/home/book"
+              className="group inline-flex items-start gap-2 no-underline"
+            >
+              <span
+                aria-hidden
+                className="mt-[7px] h-1.5 w-1.5 flex-shrink-0 rounded-full bg-[var(--color-mineral)]"
+              />
+              <span style={{ fontSize: "var(--text-body-sm)", lineHeight: 1.4 }}>
+                <span
+                  className="font-medium uppercase text-[var(--color-mineral-deep)]"
+                  style={{ letterSpacing: "var(--tracking-label)" }}
+                >
+                  Launch offer
+                </span>
+                <span className="text-[var(--color-neutral-700)] transition-colors duration-[var(--duration-fast)] group-hover:text-[var(--color-ink)]">
+                  {" — 20% off your first three weekly cleans, for our first ten customers"}
+                </span>
+                <span aria-hidden className="text-[var(--color-mineral)]">
+                  {" →"}
+                </span>
+              </span>
+            </Link>
             <div className="flex flex-wrap items-center gap-6">
               <Button href="/home/book" variant="accent" size="lg">
                 Book your first clean

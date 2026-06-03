@@ -27,6 +27,17 @@ import {
   serviceTypeLabel,
 } from "@/lib/booking";
 
+// Short, phone-friendly labels for the four-step progress indicator. The full
+// STEP_LABELS still drive the screen-reader announcement (aria-valuetext) and
+// each step's own heading; these just keep the stepper legible four-up on a
+// narrow viewport.
+const STEP_SHORT_LABELS: Record<StepId, string> = {
+  1: "Postcode",
+  2: "Home",
+  3: "Visit",
+  4: "Details",
+};
+
 function isEmail(v: string): boolean {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
 }
@@ -241,39 +252,51 @@ export function BookingFlow({ initialServiceType = "standard" }: BookingFlowProp
     <section className="py-16 md:py-24 bg-[var(--color-bone)]">
       <Container width="narrow">
         <div className="mb-12">
-          <div className="flex items-center justify-between mb-3">
-            <p
-              className="text-[var(--color-mineral)] font-medium uppercase"
-              style={{ fontSize: "var(--text-label)", letterSpacing: "var(--tracking-label)" }}
-            >
-              Step {step} of 4
-            </p>
-            <p
-              className="text-[var(--color-neutral-500)] font-medium"
-              style={{ fontSize: "var(--text-caption)" }}
-            >
-              {STEP_LABELS[step]}
-            </p>
-          </div>
-          <div
-            className="flex gap-1.5"
+          <p
+            className="text-[var(--color-mineral)] font-medium uppercase mb-4"
+            style={{ fontSize: "var(--text-label)", letterSpacing: "var(--tracking-label)" }}
+          >
+            Step {step} of 4
+          </p>
+          <ol
+            className="grid grid-cols-4 gap-x-2 gap-y-2.5"
             role="progressbar"
             aria-valuenow={step}
             aria-valuemin={1}
             aria-valuemax={4}
+            aria-valuetext={`Step ${step} of 4 — ${STEP_LABELS[step]}`}
           >
-            {[1, 2, 3, 4].map((s) => (
-              <span
-                key={s}
-                className="flex-1 h-[3px] rounded-full transition-colors duration-[var(--duration-base)] ease-[var(--ease-emphasis)]"
-                style={{
-                  backgroundColor:
-                    s <= step ? "var(--color-mineral)" : "var(--color-neutral-100)",
-                }}
-                aria-hidden
-              />
-            ))}
-          </div>
+            {([1, 2, 3, 4] as StepId[]).map((s) => {
+              const done = s < step;
+              const current = s === step;
+              return (
+                <li key={s} className="flex flex-col gap-2">
+                  <span
+                    className="h-[3px] rounded-full transition-colors duration-[var(--duration-base)] ease-[var(--ease-emphasis)]"
+                    style={{
+                      backgroundColor:
+                        s <= step ? "var(--color-mineral)" : "var(--color-neutral-100)",
+                    }}
+                    aria-hidden
+                  />
+                  <span
+                    className="font-medium uppercase transition-colors duration-[var(--duration-fast)]"
+                    style={{
+                      fontSize: "var(--text-label)",
+                      letterSpacing: "var(--tracking-label)",
+                      color: current
+                        ? "var(--color-ink)"
+                        : done
+                          ? "var(--color-mineral)"
+                          : "var(--color-neutral-500)",
+                    }}
+                  >
+                    {STEP_SHORT_LABELS[s]}
+                  </span>
+                </li>
+              );
+            })}
+          </ol>
         </div>
 
         {step === 1 ? (
@@ -557,6 +580,29 @@ export function BookingFlow({ initialServiceType = "standard" }: BookingFlowProp
                   helper="Optional. Access instructions, pets, allergies, anything we should know."
                   rows={3}
                 />
+                <p
+                  className="flex items-start gap-2.5 text-[var(--color-neutral-500)]"
+                  style={{ fontSize: "var(--text-caption)", lineHeight: 1.5 }}
+                >
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="1.5"
+                    aria-hidden
+                    width="15"
+                    height="15"
+                    className="mt-px flex-shrink-0 text-[var(--color-mineral)]"
+                  >
+                    <rect x="5" y="11" width="14" height="10" rx="2" />
+                    <path d="M8 11V7a4 4 0 0 1 8 0v4" />
+                  </svg>
+                  <span>
+                    No payment is taken until you confirm on the next step. Your card
+                    is handled securely by Stripe — Tarnshire never sees your card
+                    number.
+                  </span>
+                </p>
               </>
             )}
           </div>
@@ -617,6 +663,16 @@ export function BookingFlow({ initialServiceType = "standard" }: BookingFlowProp
                   {submitError}
                 </p>
               </div>
+            ) : null}
+            {showErrors && !(step === 1 && postcodeIsOutsideLaunch) ? (
+              <p
+                role="status"
+                aria-live="polite"
+                className="text-[var(--color-signal)]"
+                style={{ fontSize: "var(--text-body-sm)", lineHeight: 1.5 }}
+              >
+                Add the highlighted details above to continue.
+              </p>
             ) : null}
             <div className="flex items-center justify-between gap-4">
               <button

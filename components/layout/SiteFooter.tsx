@@ -24,7 +24,7 @@ const brandLinks: FooterLink[] = [
 export function SiteFooter() {
   const year = new Date().getFullYear();
   return (
-    <footer className="bg-[var(--color-bone)] border-t border-[var(--color-neutral-100)] px-6 md:px-14 pt-16 pb-10">
+    <footer id="site-footer" className="bg-[var(--color-bone)] border-t border-[var(--color-neutral-100)] px-6 md:px-14 pt-16 pb-10">
       <div className="grid grid-cols-2 md:grid-cols-4 gap-10 mb-14">
         <div className="col-span-2">
           <Wordmark size="md" href="/" />
