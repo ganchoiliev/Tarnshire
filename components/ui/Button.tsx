@@ -2,13 +2,14 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 
 type ButtonVariant = "primary" | "accent" | "ghost";
-type ButtonSize = "md" | "lg";
+type ButtonSize = "sm" | "md" | "lg";
 
 type Common = {
   variant?: ButtonVariant;
   size?: ButtonSize;
   className?: string;
   children: ReactNode;
+  showArrow?: boolean;
 };
 
 type AsLink = Common & {
@@ -33,12 +34,19 @@ const variantClass: Record<ButtonVariant, string> = {
 };
 
 const sizeClass: Record<ButtonSize, string> = {
+  sm: "px-4 py-2.5 text-[13px]",
   md: "px-5 py-3 text-[14px]",
   lg: "px-7 py-4 text-[14px]",
 };
 
 export function Button(props: ButtonProps) {
-  const { variant = "primary", size = "lg", className = "", children } = props;
+  const {
+    variant = "primary",
+    size = "lg",
+    className = "",
+    children,
+    showArrow = true,
+  } = props;
   const cls = [
     "inline-flex items-center gap-3 font-medium tracking-[0.02em] rounded-[var(--radius-sm)] transition-colors duration-[var(--duration-fast)] ease-[var(--ease-emphasis)] no-underline",
     variantClass[variant],
@@ -46,23 +54,24 @@ export function Button(props: ButtonProps) {
     className,
   ].join(" ");
 
+  const content = (
+    <>
+      <span>{children}</span>
+      {showArrow && <span aria-hidden>→</span>}
+    </>
+  );
+
   if ("href" in props && props.href) {
     return (
       <Link href={props.href} prefetch={props.prefetch} className={cls}>
-        <span>{children}</span>
-        <span aria-hidden>→</span>
+        {content}
       </Link>
     );
   }
 
   return (
-    <button
-      type={props.type ?? "button"}
-      onClick={props.onClick}
-      className={cls}
-    >
-      <span>{children}</span>
-      <span aria-hidden>→</span>
+    <button type={props.type ?? "button"} onClick={props.onClick} className={cls}>
+      {content}
     </button>
   );
 }

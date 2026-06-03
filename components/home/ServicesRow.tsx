@@ -42,7 +42,7 @@ const services: ServiceCardData[] = [
 
 export function ServicesRow() {
   return (
-    <section className="py-20 md:py-28 bg-[var(--color-bone)]" aria-label="Services">
+    <section id="services" className="py-20 md:py-28 bg-[var(--color-bone)]" aria-label="Services">
       <Container>
         <div className="mb-12 md:mb-16 max-w-[640px]">
           <p

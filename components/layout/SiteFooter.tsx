@@ -5,10 +5,10 @@ type FooterLink = { href: string; label: string };
 
 const homeLinks: FooterLink[] = [
   { href: "/", label: "For Home" },
-  { href: "/home/services", label: "Services" },
+  { href: "/#services", label: "Services" },
   { href: "/home/deep-clean", label: "Deep Clean" },
-  { href: "/home/pricing", label: "Pricing" },
-  { href: "/home/areas", label: "Areas" },
+  { href: "/#pricing", label: "Pricing" },
+  { href: "/#areas", label: "Areas" },
 ];
 
 const brandLinks: FooterLink[] = [

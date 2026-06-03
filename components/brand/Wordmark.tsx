@@ -9,7 +9,7 @@ type WordmarkProps = {
 const sizeClass: Record<NonNullable<WordmarkProps["size"]>, string> = {
   sm: "text-[14px]",
   md: "text-[18px]",
-  lg: "text-[24px]",
+  lg: "text-[20px] md:text-[24px]",
   xl: "text-[40px] md:text-[56px]",
 };
 

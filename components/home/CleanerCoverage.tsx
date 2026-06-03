@@ -11,7 +11,7 @@ const coverageBoroughs: Borough[] = [
 
 export function CleanerCoverage() {
   return (
-    <section className="py-20 md:py-28 bg-[var(--color-bone-soft)] border-y border-[var(--color-neutral-100)]" aria-label="Where we clean">
+    <section id="areas" className="py-20 md:py-28 bg-[var(--color-bone-soft)] border-y border-[var(--color-neutral-100)]" aria-label="Where we clean">
       <Container>
         <div className="mb-12 md:mb-14 max-w-[640px]">
           <p

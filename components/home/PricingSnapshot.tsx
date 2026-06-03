@@ -4,6 +4,7 @@ import { Container } from "@/components/ui/Container";
 export function PricingSnapshot() {
   return (
     <section
+      id="pricing"
       className="py-16 md:py-20 bg-[var(--color-bone-soft)] border-y border-[var(--color-neutral-100)]"
       aria-label="Pricing snapshot"
     >
