@@ -18,8 +18,8 @@ export const metadata: Metadata = {
     siteName: "Tarnshire",
   },
   robots: {
-    index: false,
-    follow: false,
+    index: true,
+    follow: true,
   },
 };
 
