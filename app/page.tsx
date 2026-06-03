@@ -5,13 +5,13 @@ import { RouteSplit } from "@/components/home/RouteSplit";
 import { TrustStrip } from "@/components/home/TrustStrip";
 
 export const metadata: Metadata = {
-  title: "Tarnshire — Premium cleaning across Greater Manchester",
+  title: "Tarnshire · Premium domestic cleaning in Greater Manchester",
   description:
-    "Premium domestic housekeeping with instant booking, plus accredited commercial cleaning across Greater Manchester. Same cleaner every visit. DBS-checked. Fully insured.",
+    "Premium recurring home cleaning for South Manchester households in M20, M21 and M14. The same cleaner every visit, DBS-checked and fully insured.",
   openGraph: {
-    title: "Tarnshire — Premium cleaning across Greater Manchester",
+    title: "Tarnshire · Premium domestic cleaning in Greater Manchester",
     description:
-      "Premium domestic housekeeping and accredited commercial cleaning across Greater Manchester. Same cleaner every visit.",
+      "Premium recurring home cleaning in M20, M21 and M14. The same cleaner every visit, DBS-checked and fully insured.",
     images: ["/img/1-3.jpg"],
   },
 };

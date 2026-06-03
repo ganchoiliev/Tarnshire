@@ -32,7 +32,7 @@ export default function TheAlmanacPage() {
           </p>
           <h3>Standards</h3>
           <p>
-            Compliance explainers, accreditation walkthroughs, the difference between BICSc and ISO and CHAS and why each matters to a procurement team.
+            Compliance explainers and standards walkthroughs: what the credentials and certifications behind a quality clean actually mean, and why each one matters.
           </p>
           <h3>Studies</h3>
           <p>

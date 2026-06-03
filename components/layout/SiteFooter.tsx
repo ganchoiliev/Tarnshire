@@ -14,7 +14,6 @@ const homeLinks: FooterLink[] = [
 const businessLinks: FooterLink[] = [
   { href: "/business", label: "For Business" },
   { href: "/business/sectors", label: "Sectors" },
-  { href: "/business/accreditations", label: "Accreditations" },
   { href: "/business/quote", label: "Request a quote" },
 ];
 

@@ -26,7 +26,7 @@ export function RouteSplit() {
         variant="business"
         label="For Business"
         headline="Cleaning standards your facilities team can defend."
-        lede="Commercial contracts across Greater Manchester. Accredited operatives, transparent pricing, walkthrough scheduled within five working days."
+        lede="Commercial contracts across Greater Manchester. Vetted operatives, transparent pricing, walkthrough scheduled within five working days."
         ctaLabel="Request a quote"
         ctaHref="/business"
         metaPrimary="DBS · insured · COSHH"

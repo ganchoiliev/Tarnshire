@@ -7,7 +7,7 @@ import { Prose } from "@/components/shared/Prose";
 export const metadata: Metadata = {
   title: "About — Tarnshire",
   description:
-    "Tarnshire is a premium cleaning brand for Greater Manchester. Same cleaner every visit. Transparent pricing. Accreditations published, not boasted.",
+    "Tarnshire is a premium cleaning brand for Greater Manchester. Same cleaner every visit. Transparent pricing. We publish what we hold, not what we hope for.",
 };
 
 export default function AboutPage() {
@@ -18,12 +18,12 @@ export default function AboutPage() {
         <PageHero
           eyebrow="About"
           headline="Premium cleaning, kept honest."
-          lede="Tarnshire is a Greater Manchester cleaning brand built on three commitments: the same cleaner every visit, transparent pricing, and accreditations published rather than boasted. We launch in 2026 from Didsbury, Chorlton, and Withington — and we publish what's true today, not what we hope will be true tomorrow."
+          lede="Tarnshire is a Greater Manchester cleaning brand built on three commitments: the same cleaner every visit, transparent pricing, and credentials published rather than boasted. We launch in 2026 from Didsbury, Chorlton, and Withington, and we publish what's true today, not what we hope will be true tomorrow."
         />
 
         <Prose eyebrow="What we do" heading="Two products, one brand.">
           <p>
-            Tarnshire operates two cleaning products under one brand. Premium recurring housekeeping for households in our launch postcodes, with instant online booking and the same cleaner every visit. Accredited commercial cleaning for offices, gyms, retail, education, and hospitality across Greater Manchester, with documented quote timelines and contract terms before any operative steps on site.
+            Tarnshire operates two cleaning products under one brand. Premium recurring housekeeping for households in our launch postcodes, with instant online booking and the same cleaner every visit. Commercial cleaning for offices, gyms, retail, education, and hospitality across Greater Manchester, with documented quote timelines and contract terms before any operative steps on site.
           </p>
           <p>
             Both products share the same vetted contractor network and the same standards. The same cleaner who cleans a Didsbury family home on Wednesday morning may clean a Spinningfields office on Wednesday evening. The work is the same. The standards are the same. The pay is the same.
@@ -39,9 +39,9 @@ export default function AboutPage() {
           <p>
             Every domestic rate is published on the pricing page. Every commercial engagement runs on a documented timeline: quote within 24 hours, walkthrough within five working days, contract signed before first clean. No quote-call gauntlet, no surprises, no &ldquo;depends on the site&rdquo; hedges.
           </p>
-          <h3>Accreditations published, not boasted</h3>
+          <h3>Credentials published, not boasted</h3>
           <p>
-            Tarnshire holds DBS-checked operatives, £2M public liability insurance, COSHH training, and reference-verified contractors from day one. We&apos;re working toward ISO 9001, ISO 14001, BICSc, and SafeContractor through 2026 and early 2027. We publish both lists. We don&apos;t claim what we haven&apos;t earned.
+            Tarnshire holds DBS-checked operatives, £2M public liability insurance, COSHH training, and reference-verified contractors from day one. We&apos;re working toward further industry credentials and certifications through 2026 and early 2027. We publish both lists. We don&apos;t claim what we haven&apos;t earned.
           </p>
         </Prose>
 
