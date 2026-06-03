@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { playfair, dmSans } from "./fonts";
+import { SmoothScroll } from "@/components/motion/SmoothScroll";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -35,7 +36,7 @@ export default function RootLayout({
           fontFamily: "var(--font-sans-loaded), var(--font-sans)",
         }}
       >
-        {children}
+        <SmoothScroll>{children}</SmoothScroll>
       </body>
     </html>
   );

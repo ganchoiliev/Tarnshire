@@ -13,7 +13,7 @@ export function ServiceCard({ href, title, body, price, imageSrc }: ServiceCardD
   return (
     <Link
       href={href}
-      className="group block bg-[var(--color-bone)] border border-[var(--color-neutral-100)] rounded-[var(--radius-md)] overflow-hidden transition-colors duration-[var(--duration-base)] ease-[var(--ease-emphasis)] hover:border-[var(--color-neutral-300)]"
+      className="group block bg-[var(--color-bone)] border border-[var(--color-neutral-100)] rounded-[var(--radius-md)] overflow-hidden transition-[color,border-color,box-shadow,transform] duration-[var(--duration-base)] ease-[var(--ease-emphasis)] hover:border-[var(--color-neutral-300)] motion-safe:hover:-translate-y-1 motion-safe:hover:shadow-[var(--shadow-lg)]"
     >
       <div className="relative aspect-[4/5] w-full overflow-hidden bg-[var(--color-bone-soft)]">
         <Image
@@ -21,7 +21,7 @@ export function ServiceCard({ href, title, body, price, imageSrc }: ServiceCardD
           alt=""
           fill
           sizes="(min-width: 1024px) 240px, (min-width: 640px) 33vw, 50vw"
-          className="object-cover"
+          className="object-cover transition-transform duration-[var(--duration-slow)] ease-[var(--ease-emphasis)] motion-safe:group-hover:scale-105"
         />
       </div>
       <div className="p-5 md:p-6">

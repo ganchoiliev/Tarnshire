@@ -23,7 +23,7 @@ export function SiteHeader() {
               <Link
                 key={link.href}
                 href={link.href}
-                className="text-[13px] font-medium uppercase text-[var(--color-neutral-500)] hover:text-[var(--color-ink)] transition-colors duration-[var(--duration-fast)] ease-[var(--ease-emphasis)]"
+                className="link-underline text-[13px] font-medium uppercase text-[var(--color-neutral-500)] hover:text-[var(--color-ink)] transition-colors duration-[var(--duration-fast)] ease-[var(--ease-emphasis)]"
                 style={{ letterSpacing: "var(--tracking-caption)" }}
               >
                 {link.label}

@@ -48,7 +48,7 @@ export function Button(props: ButtonProps) {
     showArrow = true,
   } = props;
   const cls = [
-    "inline-flex items-center gap-3 font-medium tracking-[0.02em] rounded-[var(--radius-sm)] transition-colors duration-[var(--duration-fast)] ease-[var(--ease-emphasis)] no-underline",
+    "inline-flex items-center gap-3 font-medium tracking-[0.02em] rounded-[var(--radius-sm)] transition-[color,background-color,box-shadow,transform] duration-[var(--duration-fast)] ease-[var(--ease-emphasis)] no-underline motion-safe:hover:-translate-y-px motion-safe:hover:shadow-[var(--shadow-md)] motion-safe:active:translate-y-0 motion-safe:active:scale-[0.98]",
     variantClass[variant],
     sizeClass[size],
     className,

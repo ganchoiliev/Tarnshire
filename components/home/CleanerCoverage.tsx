@@ -1,5 +1,7 @@
 import Link from "next/link";
 import { Container } from "@/components/ui/Container";
+import { Reveal } from "@/components/motion/Reveal";
+import { STAGGER_STEP } from "@/components/motion/motion-tokens";
 
 type Borough = { code: string; name: string; postcode: string };
 
@@ -13,7 +15,7 @@ export function CleanerCoverage() {
   return (
     <section id="areas" className="py-20 md:py-28 bg-[var(--color-bone-soft)] border-y border-[var(--color-neutral-100)]" aria-label="Where we clean">
       <Container>
-        <div className="mb-12 md:mb-14 max-w-[640px]">
+        <Reveal className="mb-12 md:mb-14 max-w-[640px]">
           <p
             className="text-[var(--color-mineral)] font-medium uppercase mb-4"
             style={{
@@ -42,43 +44,44 @@ export function CleanerCoverage() {
             taking bookings now across Didsbury, Chorlton, and Withington. The
             same cleaner every visit, matched to your home.
           </p>
-        </div>
+        </Reveal>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
-          {coverageBoroughs.map((b) => (
-            <Link
-              key={b.postcode}
-              href="/home/book"
-              className="group flex items-center gap-5 p-6 bg-[var(--color-bone)] border border-[var(--color-neutral-100)] rounded-[var(--radius-md)] hover:border-[var(--color-neutral-300)] transition-colors duration-[var(--duration-base)] ease-[var(--ease-emphasis)]"
-            >
-              <div
-                className="flex-shrink-0 w-16 h-16 rounded-full bg-[var(--color-mineral)] text-[var(--color-bone)] flex items-center justify-center font-medium"
-                style={{
-                  fontFamily: "var(--font-display-loaded), var(--font-display)",
-                  fontSize: "var(--text-body-lg)",
-                  letterSpacing: "0.04em",
-                }}
-                aria-hidden
+          {coverageBoroughs.map((b, i) => (
+            <Reveal key={b.postcode} delay={i * STAGGER_STEP}>
+              <Link
+                href="/home/book"
+                className="group flex items-center gap-5 p-6 bg-[var(--color-bone)] border border-[var(--color-neutral-100)] rounded-[var(--radius-md)] hover:border-[var(--color-neutral-300)] transition-[color,border-color,box-shadow,transform] duration-[var(--duration-base)] ease-[var(--ease-emphasis)] motion-safe:hover:-translate-y-1 motion-safe:hover:shadow-[var(--shadow-md)]"
               >
-                {b.code}
-              </div>
-              <div>
-                <p
-                  className="text-[var(--color-ink)] font-medium mb-1"
-                  style={{ fontSize: "var(--text-body)", lineHeight: 1.3 }}
-                >
-                  {b.name}
-                </p>
-                <p
-                  className="text-[var(--color-mineral)] font-medium uppercase"
+                <div
+                  className="flex-shrink-0 w-16 h-16 rounded-full bg-[var(--color-mineral)] text-[var(--color-bone)] flex items-center justify-center font-medium"
                   style={{
-                    fontSize: "var(--text-label)",
-                    letterSpacing: "var(--tracking-label)",
+                    fontFamily: "var(--font-display-loaded), var(--font-display)",
+                    fontSize: "var(--text-body-lg)",
+                    letterSpacing: "0.04em",
                   }}
+                  aria-hidden
                 >
-                  Available now →
-                </p>
-              </div>
-            </Link>
+                  {b.code}
+                </div>
+                <div>
+                  <p
+                    className="text-[var(--color-ink)] font-medium mb-1"
+                    style={{ fontSize: "var(--text-body)", lineHeight: 1.3 }}
+                  >
+                    {b.name}
+                  </p>
+                  <p
+                    className="text-[var(--color-mineral)] font-medium uppercase"
+                    style={{
+                      fontSize: "var(--text-label)",
+                      letterSpacing: "var(--tracking-label)",
+                    }}
+                  >
+                    Available now →
+                  </p>
+                </div>
+              </Link>
+            </Reveal>
           ))}
         </div>
       </Container>

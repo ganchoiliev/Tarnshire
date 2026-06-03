@@ -6,11 +6,9 @@ import Link from "next/link";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { Wordmark } from "@/components/brand/Wordmark";
 import { Button } from "@/components/ui/Button";
+import { EASE_EMPHASIS } from "@/components/motion/motion-tokens";
 
 type NavLink = { href: string; label: string };
-
-// --ease-emphasis, expressed as a cubic-bezier tuple for Framer Motion.
-const EASE_EMPHASIS: [number, number, number, number] = [0.22, 1, 0.36, 1];
 
 export function MobileNav({ navLinks }: { navLinks: NavLink[] }) {
   const [open, setOpen] = useState(false);
@@ -134,6 +132,7 @@ export function MobileNav({ navLinks }: { navLinks: NavLink[] }) {
             exit={{ opacity: 0, y: offset }}
             transition={transition}
             onClick={onPanelClick}
+            data-lenis-prevent
             className="fixed inset-0 z-50 flex flex-col overflow-y-auto bg-[var(--color-bone)]"
           >
             <div className="flex items-center justify-between px-6 py-7">

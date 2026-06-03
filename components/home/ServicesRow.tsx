@@ -1,5 +1,7 @@
 import { Container } from "@/components/ui/Container";
 import { ServiceCard, type ServiceCardData } from "./ServiceCard";
+import { Reveal } from "@/components/motion/Reveal";
+import { STAGGER_STEP } from "@/components/motion/motion-tokens";
 import { IMAGES } from "@/lib/images";
 import { formatGBP, fromPrice } from "@/lib/booking";
 
@@ -26,7 +28,7 @@ export function ServicesRow() {
   return (
     <section id="services" className="py-20 md:py-28 bg-[var(--color-bone)]" aria-label="Services">
       <Container>
-        <div className="mb-12 md:mb-16 max-w-[640px]">
+        <Reveal className="mb-12 md:mb-16 max-w-[640px]">
           <p
             className="text-[var(--color-mineral)] font-medium uppercase mb-4"
             style={{
@@ -47,10 +49,12 @@ export function ServicesRow() {
           >
             Two services. One standard.
           </h2>
-        </div>
+        </Reveal>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6 max-w-[720px]">
-          {services.map((s) => (
-            <ServiceCard key={s.href} {...s} />
+          {services.map((s, i) => (
+            <Reveal key={s.href} delay={i * STAGGER_STEP}>
+              <ServiceCard {...s} />
+            </Reveal>
           ))}
         </div>
       </Container>

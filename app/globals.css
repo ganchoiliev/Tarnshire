@@ -127,6 +127,21 @@
 
 /* The global prefers-reduced-motion rule from layer base already neutralises animation-duration to 0.01ms, so no override needed here. */
 
+/* Animated link underline — grows from the left on hover/focus. Reduced-motion
+   users land on the same end state instantly (the global base rule neutralises
+   this transition); it is a background-size change, never a transform. */
+.link-underline {
+  background-image: linear-gradient(currentColor, currentColor);
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  background-size: 0% 1px;
+  transition: background-size var(--duration-base) var(--ease-emphasis);
+}
+@media (hover: hover) and (pointer: fine) {
+  .link-underline:hover { background-size: 100% 1px; }
+}
+.link-underline:focus-visible { background-size: 100% 1px; }
+
 .prose-tarnshire p { margin-bottom: 1.25em; }
 .prose-tarnshire p:last-child { margin-bottom: 0; }
 .prose-tarnshire h3 {

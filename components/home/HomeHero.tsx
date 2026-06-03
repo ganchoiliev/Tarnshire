@@ -1,23 +1,83 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
+import {
+  motion,
+  useAnimationFrame,
+  useMotionValue,
+  useReducedMotion,
+  useTransform,
+  type Variants,
+} from "framer-motion";
 import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
 import { IMAGES } from "@/lib/images";
+import {
+  DURATION_SLOW,
+  EASE_EMPHASIS,
+  REVEAL_DISTANCE,
+} from "@/components/motion/motion-tokens";
+
+const group: Variants = {
+  hidden: {},
+  visible: {
+    transition: { staggerChildren: 0.12, delayChildren: 0.08 },
+  },
+};
+
+const piece: Variants = {
+  hidden: { opacity: 0, y: REVEAL_DISTANCE },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: DURATION_SLOW, ease: EASE_EMPHASIS },
+  },
+};
 
 export function HomeHero() {
+  const reduceMotion = useReducedMotion();
+
+  // Parallax driven by the raw window scroll position (px). Framer's useScroll
+  // can't be used here: Lenis stops native scroll events from propagating, so
+  // useScroll never updates while smoothing is on. Polling the real (Lenis-
+  // smoothed) window.scrollY each frame tracks it reliably and stays decoupled
+  // from whether Lenis is mounted. The hero sits at the top, so 0→640px of
+  // scroll covers its drift; useTransform clamps beyond.
+  const scrollPx = useMotionValue(0);
+  useAnimationFrame(() => {
+    if (reduceMotion) return;
+    const y = window.scrollY;
+    if (y !== scrollPx.get()) scrollPx.set(y);
+  });
+  // ±6% travel. The image carries a constant 1.2 scale (10% overflow per edge),
+  // so the drift never reveals an edge — and the section clips it anyway.
+  const imageY = useTransform(scrollPx, [0, 640], ["-6%", "6%"]);
+
+  const groupProps = reduceMotion
+    ? {}
+    : { variants: group, initial: "hidden", animate: "visible" };
+  const pieceProps = reduceMotion ? {} : { variants: piece };
+
   return (
     <section className="relative overflow-hidden border-b border-[var(--color-neutral-100)] py-20 md:py-32 lg:py-40">
-      <Image
-        src={IMAGES.heroHome}
-        alt=""
-        fill
-        priority
-        sizes="100vw"
-        className="object-cover opacity-[0.22] pointer-events-none"
-      />
+      <motion.div
+        aria-hidden
+        className="absolute inset-0 pointer-events-none"
+        style={reduceMotion ? undefined : { y: imageY, scale: 1.2 }}
+      >
+        <Image
+          src={IMAGES.heroHome}
+          alt=""
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover opacity-[0.22]"
+        />
+      </motion.div>
       <Container className="relative z-10">
-        <div className="max-w-[720px]">
-          <h1
+        <motion.div className="max-w-[720px]" {...groupProps}>
+          <motion.h1
             className="font-medium text-[var(--color-ink)] mb-8"
             style={{
               fontFamily: "var(--font-display-loaded), var(--font-display)",
@@ -25,24 +85,26 @@ export function HomeHero() {
               lineHeight: 0.96,
               letterSpacing: "var(--tracking-display)",
             }}
+            {...pieceProps}
           >
             The same cleaner, every visit.
-          </h1>
-          <p
+          </motion.h1>
+          <motion.p
             className="text-[var(--color-neutral-700)] mb-12 max-w-[560px]"
             style={{ fontSize: "var(--text-body-lg)", lineHeight: 1.55 }}
+            {...pieceProps}
           >
             Premium recurring housekeeping in Didsbury, Chorlton, and Withington.
             Vetted, insured, same cleaner every visit. A weekly hour returned to your week.
-          </p>
-          <div className="flex flex-col items-start gap-4">
+          </motion.p>
+          <motion.div className="flex flex-col items-start gap-4" {...pieceProps}>
             <div className="flex flex-wrap items-center gap-6">
               <Button href="/home/book" variant="accent" size="lg">
                 Book your first clean
               </Button>
               <Link
                 href="/home/pricing"
-                className="text-[var(--color-ink)] hover:text-[var(--color-mineral)] transition-colors duration-[var(--duration-fast)] font-medium underline underline-offset-4 decoration-[0.5px]"
+                className="link-underline text-[var(--color-ink)] hover:text-[var(--color-mineral)] transition-colors duration-[var(--duration-fast)] font-medium"
                 style={{ fontSize: "var(--text-body)" }}
               >
                 See full pricing →
@@ -50,13 +112,13 @@ export function HomeHero() {
             </div>
             <Link
               href="/home/deep-clean"
-              className="text-[var(--color-neutral-500)] hover:text-[var(--color-mineral)] transition-colors duration-[var(--duration-fast)] underline underline-offset-4 decoration-[0.5px]"
+              className="link-underline text-[var(--color-neutral-500)] hover:text-[var(--color-mineral)] transition-colors duration-[var(--duration-fast)]"
               style={{ fontSize: "var(--text-body-sm)" }}
             >
               Need a one-off deep clean instead? →
             </Link>
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
       </Container>
     </section>
   );
