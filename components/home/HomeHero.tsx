@@ -17,16 +17,6 @@ export function HomeHero() {
       />
       <Container className="relative z-10">
         <div className="max-w-[720px]">
-          <div
-            className="inline-flex items-center gap-3 text-[var(--color-mineral)] font-medium mb-7 uppercase"
-            style={{
-              fontSize: "var(--text-label)",
-              letterSpacing: "var(--tracking-label)",
-            }}
-          >
-            <span className="inline-block w-6 h-px bg-[var(--color-mineral)]" aria-hidden />
-            For Home
-          </div>
           <h1
             className="font-medium text-[var(--color-ink)] mb-8"
             style={{

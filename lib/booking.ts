@@ -81,7 +81,7 @@ export const FREQUENCY_OPTIONS = [
     helper: "Same cleaner, same time, every week. Most customers choose this.",
   },
   { value: "fortnightly", label: "Fortnightly", helper: "Same cleaner, every two weeks." },
-  { value: "monthly", label: "Monthly", helper: "Less frequent — small premium." },
+  { value: "monthly", label: "Monthly", helper: "Less frequent, with a small premium." },
   {
     value: "one_off",
     label: "One-off deep clean",
@@ -96,39 +96,61 @@ export const TIME_SLOT_OPTIONS = [
 ];
 
 /**
+ * Per-visit rate tables in GBP. Single source of truth for every price shown on
+ * the site (pricing page, service cards, snapshots) and for the client-side
+ * estimate. Mirrored in pence in supabase/functions/create-booking/index.ts
+ * (calculatePricePence), from which the Stripe charge derives. BOTH MUST MATCH.
+ */
+export const STANDARD_BASE_RATES: Record<string, number> = {
+  studio: 35,
+  "1": 42,
+  "2": 42,
+  "3": 52,
+  "4": 62,
+  "5_plus": 72,
+};
+
+export const DEEP_CLEAN_RATES: Record<string, number> = {
+  studio: 100,
+  "1": 120,
+  "2": 120,
+  "3": 150,
+  "4": 190,
+  "5_plus": 230,
+};
+
+export const FREQUENCY_MULTIPLIERS: Record<string, number> = {
+  weekly: 1.0,
+  fortnightly: 1.0,
+  monthly: 1.05,
+  one_off: 1.5,
+};
+
+/** Fallback standard rate when bedrooms is unknown. Mirrors the Edge Function. */
+export const STANDARD_DEFAULT_RATE = 42;
+
+/**
  * Calculate price per visit in GBP.
  * Mirrored in supabase/functions/create-booking/index.ts (calculatePricePence).
- * BOTH MUST MATCH — Stripe charge derives from the Edge Function copy.
+ * BOTH MUST MATCH. The Stripe charge derives from the Edge Function copy.
  */
 export function calculatePricePerVisit(state: BookingState): number {
   if (state.serviceType === "deep_clean") {
-    const deepCleanBase: Record<string, number> = {
-      studio: 100,
-      "1": 120,
-      "2": 120,
-      "3": 150,
-      "4": 190,
-      "5_plus": 230,
-    };
-    return deepCleanBase[state.bedrooms] ?? 0;
+    return DEEP_CLEAN_RATES[state.bedrooms] ?? 0;
   }
-  const base: Record<string, number> = {
-    studio: 35,
-    "1": 42,
-    "2": 42,
-    "3": 52,
-    "4": 62,
-    "5_plus": 72,
-  };
-  const adjust: Record<string, number> = {
-    weekly: 1.0,
-    fortnightly: 1.0,
-    monthly: 1.05,
-    one_off: 1.5,
-  };
-  const b = base[state.bedrooms] ?? 42;
-  const a = adjust[state.frequency] ?? 1.0;
+  const b = STANDARD_BASE_RATES[state.bedrooms] ?? STANDARD_DEFAULT_RATE;
+  const a = FREQUENCY_MULTIPLIERS[state.frequency] ?? 1.0;
   return Math.round(b * a);
+}
+
+/**
+ * The lowest published per-visit rate for a service (the honest "from" price),
+ * derived from the rate tables so cards and snapshots can never drift from the
+ * engine. Standard resolves to the studio rate; deep clean to the studio flat.
+ */
+export function fromPrice(serviceType: ServiceType): number {
+  const table = serviceType === "deep_clean" ? DEEP_CLEAN_RATES : STANDARD_BASE_RATES;
+  return Math.min(...Object.values(table));
 }
 
 export function serviceTypeLabel(serviceType: ServiceType): string {

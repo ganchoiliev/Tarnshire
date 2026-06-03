@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Container } from "@/components/ui/Container";
+import { formatGBP, fromPrice } from "@/lib/booking";
 
 export function PricingSnapshot() {
   return (
@@ -35,8 +36,8 @@ export function PricingSnapshot() {
               className="text-[var(--color-neutral-700)] max-w-[520px]"
               style={{ fontSize: "var(--text-body-lg)", lineHeight: 1.55 }}
             >
-              From £42 for two cleaners, one hour. Every rate published. No quote
-              calls, no surprises.
+              From {formatGBP(fromPrice("standard"))} a visit. Every rate
+              published. No quote calls, no surprises.
             </p>
           </div>
           <Link

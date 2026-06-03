@@ -1,42 +1,24 @@
 import { Container } from "@/components/ui/Container";
 import { ServiceCard, type ServiceCardData } from "./ServiceCard";
 import { IMAGES } from "@/lib/images";
+import { formatGBP, fromPrice } from "@/lib/booking";
 
+// Two real, fully bookable products. Prices derive from the booking engine
+// (lib/booking.ts) so a card can never advertise a rate we would not charge.
 const services: ServiceCardData[] = [
   {
-    href: "/home/services/regular",
+    href: "/home/book",
     title: "Regular cleaning",
     body: "Weekly or fortnightly. The same cleaner, every visit.",
-    price: "From £42",
+    price: `From ${formatGBP(fromPrice("standard"))}`,
     imageSrc: IMAGES.serviceRegular,
   },
   {
-    href: "/home/services/deep",
+    href: "/home/deep-clean",
     title: "Deep cleaning",
-    body: "A top-to-bottom reset. One-off, on request.",
-    price: "From £180",
+    body: "A one-off, top-to-bottom reset. Flat price by size.",
+    price: `From ${formatGBP(fromPrice("deep_clean"))}`,
     imageSrc: IMAGES.serviceDeep,
-  },
-  {
-    href: "/home/services/end-of-tenancy",
-    title: "End of tenancy",
-    body: "Deposit-back specialism. Move-out, every detail.",
-    price: "From £210",
-    imageSrc: IMAGES.serviceEndOfTenancy,
-  },
-  {
-    href: "/home/services/oven",
-    title: "Oven & specialist",
-    body: "Single-room intensive. Oven, hob, extractor.",
-    price: "From £85",
-    imageSrc: IMAGES.serviceOven,
-  },
-  {
-    href: "/home/services/airbnb-turnover",
-    title: "Airbnb turnover",
-    body: "Same-day reset for hosts. Linens included.",
-    price: "From £55",
-    imageSrc: IMAGES.serviceAirbnb,
   },
 ];
 
@@ -63,10 +45,10 @@ export function ServicesRow() {
               letterSpacing: "var(--tracking-heading)",
             }}
           >
-            Five ways. One standard.
+            Two services. One standard.
           </h2>
         </div>
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 md:gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6 max-w-[720px]">
           {services.map((s) => (
             <ServiceCard key={s.href} {...s} />
           ))}
