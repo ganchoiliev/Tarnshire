@@ -11,12 +11,6 @@ const homeLinks: FooterLink[] = [
   { href: "/home/areas", label: "Areas" },
 ];
 
-const businessLinks: FooterLink[] = [
-  { href: "/business", label: "For Business" },
-  { href: "/business/sectors", label: "Sectors" },
-  { href: "/business/quote", label: "Request a quote" },
-];
-
 const brandLinks: FooterLink[] = [
   { href: "/about", label: "About" },
   { href: "/our-cleaners", label: "Our Cleaners" },
@@ -32,7 +26,7 @@ export function SiteFooter() {
   const year = new Date().getFullYear();
   return (
     <footer className="bg-[var(--color-bone)] border-t border-[var(--color-neutral-100)] px-6 md:px-14 pt-16 pb-10">
-      <div className="grid grid-cols-2 md:grid-cols-5 gap-10 mb-14">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-10 mb-14">
         <div className="col-span-2">
           <Wordmark size="md" href="/" />
           <p
@@ -44,7 +38,6 @@ export function SiteFooter() {
         </div>
 
         <FooterColumn title="For Home" links={homeLinks} />
-        <FooterColumn title="For Business" links={businessLinks} />
         <FooterColumn title="Brand" links={brandLinks} />
       </div>
 

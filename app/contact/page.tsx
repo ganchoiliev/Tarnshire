@@ -31,13 +31,6 @@ const methods: ContactMethod[] = [
     href: "mailto:bookings@tarnshire.co.uk",
   },
   {
-    label: "Quotes",
-    primary: "quotes@tarnshire.co.uk",
-    secondary:
-      "Commercial quote enquiries. Or request a quote directly via /business/quote when slice 2 ships.",
-    href: "mailto:quotes@tarnshire.co.uk",
-  },
-  {
     label: "Phone line",
     primary: "Opens Q3 2026",
     secondary:
