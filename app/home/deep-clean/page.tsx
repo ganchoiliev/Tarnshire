@@ -10,10 +10,12 @@ export const metadata: Metadata = {
   title: "Tarnshire Deep Clean — Greater Manchester | Tarnshire",
   description:
     "A 4-hour minimum, top-to-bottom deep clean for move-in, move-out, post-renovation, or pre-event. Available in M20, M21, and M14.",
+  alternates: { canonical: "/home/deep-clean" },
   openGraph: {
     title: "Tarnshire Deep Clean — Greater Manchester",
     description:
       "A 4-hour minimum, top-to-bottom deep clean. Move-in, move-out, post-renovation, pre-event.",
+    url: "/home/deep-clean",
     images: ["/img/1-3.jpg"],
   },
 };
@@ -110,7 +112,7 @@ export default function DeepCleanPage() {
             src={IMAGES.serviceDeep}
             alt=""
             fill
-            priority
+            preload
             sizes="100vw"
             className="object-cover opacity-[0.18] pointer-events-none"
           />

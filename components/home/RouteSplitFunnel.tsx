@@ -31,11 +31,14 @@ export function RouteSplitFunnel({
       className="route-funnel relative overflow-hidden flex flex-col justify-between px-8 py-16 md:px-16 md:py-24 lg:py-28 min-h-[460px] md:min-h-[620px] transition-opacity duration-[var(--duration-base)] ease-[var(--ease-emphasis)]"
       data-variant={variant}
     >
+      {/* Two funnels render side by side, so either image could be the LCP
+          depending on viewport. Per Next's guidance, prefer eager loading over
+          `preload` here, since preloading both would inject competing <link>s. */}
       <Image
         src={imageSrc}
         alt=""
         fill
-        priority
+        loading="eager"
         sizes="(min-width: 768px) 50vw, 100vw"
         className="object-cover opacity-[0.18] pointer-events-none route-funnel-image transition-opacity duration-[var(--duration-base)] ease-[var(--ease-emphasis)]"
       />

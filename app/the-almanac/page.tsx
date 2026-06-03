@@ -9,6 +9,7 @@ export const metadata: Metadata = {
   title: "The Almanac — Tarnshire",
   description:
     "The editorial home of Tarnshire. Longform writing on care, the north, standards, and case studies. Launching alongside our first contracts in 2026.",
+  alternates: { canonical: "/the-almanac" },
 };
 
 export default function TheAlmanacPage() {

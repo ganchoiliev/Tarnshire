@@ -8,6 +8,7 @@ export const metadata: Metadata = {
   title: "Terms — Tarnshire",
   description:
     "Tarnshire terms of service. Currently in placeholder form, being drafted with a UK solicitor for publication in Q3 2026.",
+  alternates: { canonical: "/terms" },
 };
 
 export default function TermsPage() {

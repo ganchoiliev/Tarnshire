@@ -19,10 +19,12 @@ export const metadata: Metadata = {
   title: "Pricing · Tarnshire",
   description:
     "Every Tarnshire rate, published in full and derived from the booking engine. Recurring home cleaning and one-off deep cleans across M20, M21, and M14. No quote calls, no site visits, no surprises.",
+  alternates: { canonical: "/home/pricing" },
   openGraph: {
     title: "Tarnshire · Pricing",
     description:
       "Every rate published, in the open. Recurring cleaning and one-off deep cleans across M20, M21, and M14. No quote calls, no surprises.",
+    url: "/home/pricing",
     images: [IMAGES.serviceRegular],
   },
 };
@@ -67,7 +69,7 @@ export default function PricingPage() {
             src={IMAGES.serviceRegular}
             alt=""
             fill
-            priority
+            preload
             sizes="100vw"
             className="object-cover opacity-[0.18] pointer-events-none"
           />

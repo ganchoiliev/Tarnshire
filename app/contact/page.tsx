@@ -8,6 +8,7 @@ export const metadata: Metadata = {
   title: "Contact — Tarnshire",
   description:
     "Contact Tarnshire. Email response within 24 hours. Premium cleaning across Greater Manchester.",
+  alternates: { canonical: "/contact" },
 };
 
 type ContactMethod = {

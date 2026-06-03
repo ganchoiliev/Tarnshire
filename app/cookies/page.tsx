@@ -8,6 +8,7 @@ export const metadata: Metadata = {
   title: "Cookies — Tarnshire",
   description:
     "Tarnshire cookie policy. Currently in placeholder form, being drafted alongside our terms and privacy policy for publication in Q3 2026.",
+  alternates: { canonical: "/cookies" },
 };
 
 export default function CookiesPage() {

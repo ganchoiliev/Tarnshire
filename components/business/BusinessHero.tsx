@@ -11,7 +11,7 @@ export function BusinessHero() {
         src={IMAGES.heroBusiness}
         alt=""
         fill
-        priority
+        preload
         sizes="100vw"
         className="object-cover opacity-[0.22] pointer-events-none"
       />

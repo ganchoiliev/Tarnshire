@@ -8,6 +8,7 @@ export const metadata: Metadata = {
   title: "About — Tarnshire",
   description:
     "Tarnshire is a premium cleaning brand for Greater Manchester. Same cleaner every visit. Transparent pricing. We publish what we hold, not what we hope for.",
+  alternates: { canonical: "/about" },
 };
 
 export default function AboutPage() {

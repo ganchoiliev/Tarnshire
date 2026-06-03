@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { localBusinessSchema } from "@/lib/structured-data";
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { HomeHero } from "@/components/home/HomeHero";
@@ -18,10 +20,12 @@ export const metadata: Metadata = {
   title: "Tarnshire · Premium domestic cleaning in Greater Manchester",
   description:
     "Premium recurring home cleaning for South Manchester households in M20, M21 and M14. The same cleaner every visit, DBS-checked and fully insured.",
+  alternates: { canonical: "/" },
   openGraph: {
     title: "Tarnshire · Premium domestic cleaning in Greater Manchester",
     description:
       "Premium recurring home cleaning in M20, M21 and M14. The same cleaner every visit, DBS-checked and fully insured.",
+    url: "/",
     images: ["/img/1-3.jpg"],
   },
 };
@@ -29,6 +33,7 @@ export const metadata: Metadata = {
 export default function HomePage() {
   return (
     <>
+      <JsonLd data={localBusinessSchema()} />
       <SiteHeader />
       <main>
         <HomeHero />

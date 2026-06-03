@@ -19,7 +19,7 @@ export function SectorHero({ eyebrow, headline, lede, imageKey, locked }: Sector
         src={IMAGES[imageKey]}
         alt=""
         fill
-        priority
+        preload
         sizes="100vw"
         className={`object-cover pointer-events-none ${locked ? "opacity-[0.10]" : "opacity-[0.22]"}`}
       />

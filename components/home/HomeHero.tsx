@@ -70,7 +70,7 @@ export function HomeHero() {
           src={IMAGES.heroHome}
           alt=""
           fill
-          priority
+          preload
           sizes="100vw"
           className="object-cover opacity-[0.22]"
         />

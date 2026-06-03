@@ -10,6 +10,7 @@ export const metadata: Metadata = {
   title: "Our Cleaners — Tarnshire",
   description:
     "Tarnshire's cleaners are vetted, insured, independent professionals serving M20, M21 and M14 now, each matched to a single recurring customer. Real names and portraits appear only as each cleaner consents to photography.",
+  alternates: { canonical: "/our-cleaners" },
 };
 
 export default function OurCleanersPage() {

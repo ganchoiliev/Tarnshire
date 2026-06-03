@@ -10,9 +10,11 @@ export const metadata: Metadata = {
   title: "Careers — Tarnshire",
   description:
     "Become a Tarnshire cleaner. Self-employed, fairly paid, with your own recurring clients across Didsbury, Chorlton, and Withington. Five-working-day response.",
+  alternates: { canonical: "/careers" },
   openGraph: {
     title: "Tarnshire — Careers",
     description: "Self-employed, fairly paid, recurring clients in your own borough.",
+    url: "/careers",
     images: ["/img/1-5.jpg"],
   },
 };

@@ -258,9 +258,14 @@ export function BookingFlow({ initialServiceType = "standard" }: BookingFlowProp
           >
             Step {step} of 4
           </p>
-          <ol
+          {/* Progressbar widget: the role + aria-valuetext convey state to AT,
+              so the four visual step markers below are decorative (aria-hidden).
+              Using <ol>/<li> here would conflict with role="progressbar" (it
+              strips list semantics and orphans the items), so this is a <div>. */}
+          <div
             className="grid grid-cols-4 gap-x-2 gap-y-2.5"
             role="progressbar"
+            aria-label="Booking progress"
             aria-valuenow={step}
             aria-valuemin={1}
             aria-valuemax={4}
@@ -270,7 +275,7 @@ export function BookingFlow({ initialServiceType = "standard" }: BookingFlowProp
               const done = s < step;
               const current = s === step;
               return (
-                <li key={s} className="flex flex-col gap-2">
+                <div key={s} className="flex flex-col gap-2" aria-hidden>
                   <span
                     className="h-[3px] rounded-full transition-colors duration-[var(--duration-base)] ease-[var(--ease-emphasis)]"
                     style={{
@@ -293,10 +298,10 @@ export function BookingFlow({ initialServiceType = "standard" }: BookingFlowProp
                   >
                     {STEP_SHORT_LABELS[s]}
                   </span>
-                </li>
+                </div>
               );
             })}
-          </ol>
+          </div>
         </div>
 
         {step === 1 ? (

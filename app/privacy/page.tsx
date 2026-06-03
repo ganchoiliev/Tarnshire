@@ -8,6 +8,7 @@ export const metadata: Metadata = {
   title: "Privacy — Tarnshire",
   description:
     "Tarnshire privacy policy. Currently in placeholder form, being drafted alongside our terms for publication in Q3 2026.",
+  alternates: { canonical: "/privacy" },
 };
 
 export default function PrivacyPage() {

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { playfair, dmSans } from "./fonts";
 import { SmoothScroll } from "@/components/motion/SmoothScroll";
+import { SITE_URL } from "@/lib/site";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -10,9 +11,7 @@ export const metadata: Metadata = {
   },
   description:
     "Premium recurring home cleaning in Greater Manchester, currently serving M20, M21 and M14. The same cleaner every visit, DBS-checked and fully insured.",
-  metadataBase: new URL(
-    process.env.NEXT_PUBLIC_SITE_URL ?? "https://tarnshire.co.uk"
-  ),
+  metadataBase: new URL(SITE_URL),
   openGraph: {
     type: "website",
     locale: "en_GB",
