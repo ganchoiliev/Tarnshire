@@ -25,7 +25,6 @@ import {
   isLaunchPostcode,
   calculatePricePerVisit,
   formatGBP,
-  serviceTypeLabel,
 } from "@/lib/booking";
 
 // Short, phone-friendly labels for the four-step progress indicator. The full
@@ -652,106 +651,132 @@ export function BookingFlow({ initialServiceType = "standard" }: BookingFlowProp
         ) : null}
 
         {!(step === 4 && paymentStarted) ? (
-          <div className="flex flex-col gap-4 mt-12 pt-8 border-t border-[var(--color-neutral-100)]">
-            {showPrice ? (
-              <div className="flex items-baseline justify-between gap-4">
-                <div>
-                  <p
-                    className="text-[var(--color-mineral)] font-medium uppercase"
+          <>
+            {/* Persistent step + price summary. While a long step scrolls it stays
+                pinned to the bottom of the viewport, so the current step and the
+                running estimate never leave the screen; at the end of the step it
+                settles back into flow directly above the controls, so it never
+                covers Back / Next. The whole branch is gated out once payment
+                starts, so the bar can't sit over the Stripe element. Pure sticky
+                positioning — no JS, no transition — so it adds no layout shift and
+                needs no reduced-motion opt-out. Canonical progress semantics stay
+                on the progressbar above; this is supplementary text, not a second
+                progressbar, and holds no focusable elements so it can't trap focus. */}
+            <div
+              className="sticky bottom-0 z-30 -mx-6 mt-12 border-t border-[var(--color-neutral-100)] bg-[var(--color-bone)] shadow-[var(--shadow-lg)] md:-mx-14"
+              style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
+            >
+              <div className="flex items-center justify-between gap-4 px-6 py-3 md:px-14">
+                <span className="flex flex-col">
+                  <span
+                    className="font-medium uppercase text-[var(--color-mineral)]"
                     style={{
                       fontSize: "var(--text-label)",
                       letterSpacing: "var(--tracking-label)",
                     }}
                   >
-                    {serviceTypeLabel(state.serviceType)}
+                    Step {step} of 4
+                  </span>
+                  <span
+                    className="font-medium text-[var(--color-ink)]"
+                    style={{ fontSize: "var(--text-body)", lineHeight: 1.2 }}
+                  >
+                    {STEP_LABELS[step]}
+                  </span>
+                </span>
+                {showPrice ? (
+                  <span className="flex flex-col items-end text-right">
+                    <span
+                      className="font-medium text-[var(--color-ink)]"
+                      style={{
+                        fontFamily: "var(--font-display-loaded), var(--font-display)",
+                        fontSize: "var(--text-body-lg)",
+                        lineHeight: 1.1,
+                      }}
+                    >
+                      {formatGBP(pricePerVisit)}
+                    </span>
+                    <span
+                      className="text-[var(--color-neutral-500)]"
+                      style={{ fontSize: "var(--text-caption)", lineHeight: 1.3 }}
+                    >
+                      {isDeepClean
+                        ? "4-hr minimum"
+                        : isOneOff
+                          ? "One-off"
+                          : "Per visit"}
+                    </span>
+                  </span>
+                ) : null}
+              </div>
+            </div>
+
+            <div className="flex flex-col gap-4 mt-12 pt-8 border-t border-[var(--color-neutral-100)]">
+              {submitError ? (
+                <div
+                  className="p-4 border border-[var(--color-signal)] rounded-[var(--radius-sm)] bg-[var(--color-bone)]"
+                  role="alert"
+                >
+                  <p
+                    className="text-[var(--color-signal)] font-medium mb-1"
+                    style={{ fontSize: "var(--text-body-sm)" }}
+                  >
+                    Submission failed.
                   </p>
                   <p
-                    className="text-[var(--color-neutral-500)]"
-                    style={{ fontSize: "var(--text-caption)" }}
+                    className="text-[var(--color-neutral-700)]"
+                    style={{ fontSize: "var(--text-body-sm)", lineHeight: 1.5 }}
                   >
-                    {isDeepClean
-                      ? "4-hour minimum visit"
-                      : isOneOff
-                        ? "Estimated one-off price"
-                        : "Estimated price per visit"}
+                    {submitError}
                   </p>
                 </div>
+              ) : null}
+              {showErrors && !(step === 1 && postcodeIsOutsideLaunch) ? (
                 <p
-                  className="font-medium text-[var(--color-ink)]"
-                  style={{
-                    fontFamily: "var(--font-display-loaded), var(--font-display)",
-                    fontSize: "var(--text-display-md)",
-                    lineHeight: 1,
-                  }}
-                >
-                  {formatGBP(pricePerVisit)}
-                </p>
-              </div>
-            ) : null}
-            {submitError ? (
-              <div
-                className="p-4 border border-[var(--color-signal)] rounded-[var(--radius-sm)] bg-[var(--color-bone)]"
-                role="alert"
-              >
-                <p
-                  className="text-[var(--color-signal)] font-medium mb-1"
-                  style={{ fontSize: "var(--text-body-sm)" }}
-                >
-                  Submission failed.
-                </p>
-                <p
-                  className="text-[var(--color-neutral-700)]"
+                  role="status"
+                  aria-live="polite"
+                  className="text-[var(--color-signal)]"
                   style={{ fontSize: "var(--text-body-sm)", lineHeight: 1.5 }}
                 >
-                  {submitError}
+                  Add the highlighted details above to continue.
                 </p>
+              ) : null}
+              <div className="flex items-center justify-between gap-4">
+                <button
+                  type="button"
+                  onClick={back}
+                  disabled={step === 1 || isSubmitting}
+                  className="text-[var(--color-ink)] font-medium hover:text-[var(--color-mineral)] transition-colors duration-[var(--duration-fast)] disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:text-[var(--color-ink)]"
+                  style={{ fontSize: "var(--text-body)" }}
+                >
+                  ← Back
+                </button>
+                {step < 4 ? (
+                  <Button
+                    onClick={next}
+                    variant="primary"
+                    size="lg"
+                    className={
+                      postcodeIsOutsideLaunch && step === 1
+                        ? "opacity-30 cursor-not-allowed pointer-events-none"
+                        : ""
+                    }
+                  >
+                    Next
+                  </Button>
+                ) : (
+                  <Button
+                    onClick={handleBookingSubmit}
+                    variant="accent"
+                    size="lg"
+                    className={isSubmitting ? "opacity-60 cursor-wait pointer-events-none" : ""}
+                  >
+                    {isSubmitting ? "Setting up payment..." : "Continue to payment"}
+                  </Button>
+                )}
               </div>
-            ) : null}
-            {showErrors && !(step === 1 && postcodeIsOutsideLaunch) ? (
-              <p
-                role="status"
-                aria-live="polite"
-                className="text-[var(--color-signal)]"
-                style={{ fontSize: "var(--text-body-sm)", lineHeight: 1.5 }}
-              >
-                Add the highlighted details above to continue.
-              </p>
-            ) : null}
-            <div className="flex items-center justify-between gap-4">
-              <button
-                type="button"
-                onClick={back}
-                disabled={step === 1 || isSubmitting}
-                className="text-[var(--color-ink)] font-medium hover:text-[var(--color-mineral)] transition-colors duration-[var(--duration-fast)] disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:text-[var(--color-ink)]"
-                style={{ fontSize: "var(--text-body)" }}
-              >
-                ← Back
-              </button>
-              {step < 4 ? (
-                <Button
-                  onClick={next}
-                  variant="primary"
-                  size="lg"
-                  className={
-                    postcodeIsOutsideLaunch && step === 1
-                      ? "opacity-30 cursor-not-allowed pointer-events-none"
-                      : ""
-                  }
-                >
-                  Next
-                </Button>
-              ) : (
-                <Button
-                  onClick={handleBookingSubmit}
-                  variant="accent"
-                  size="lg"
-                  className={isSubmitting ? "opacity-60 cursor-wait pointer-events-none" : ""}
-                >
-                  {isSubmitting ? "Setting up payment..." : "Continue to payment"}
-                </Button>
-              )}
             </div>
-          </div>
+          </>
         ) : null}
       </Container>
     </section>
