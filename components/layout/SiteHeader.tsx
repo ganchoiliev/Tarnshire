@@ -13,7 +13,7 @@ const navLinks = [
 export function SiteHeader() {
   return (
     <header className="border-b border-[var(--color-neutral-100)] bg-[var(--color-bone)]">
-      <div className="mx-auto flex items-center justify-between px-6 py-7 md:px-14 md:py-9">
+      <div className="mx-auto flex items-center justify-between gap-4 px-4 py-7 md:px-14 md:py-9">
         <Wordmark size="lg" href="/" />
 
         {/* Desktop (lg+): nav links + primary booking CTA */}
