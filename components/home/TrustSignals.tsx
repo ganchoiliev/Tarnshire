@@ -37,7 +37,7 @@ export function TrustSignals() {
       aria-label="What every Tarnshire clean includes"
     >
       <Container className="py-5 md:py-6">
-        <ul className="flex flex-wrap items-center gap-x-7 gap-y-3 md:justify-between">
+        <ul className="flex flex-col items-start gap-y-3 md:flex-row md:flex-wrap md:items-center md:justify-between md:gap-x-7">
           {signals.map((label) => (
             <li key={label} className="flex items-center gap-2">
               <CheckIcon />
