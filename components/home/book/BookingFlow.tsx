@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { useLenis } from "lenis/react";
 import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
 import { QuoteInput } from "@/components/business/quote/QuoteInput";
@@ -85,6 +86,43 @@ export function BookingFlow({ initialServiceType = "standard" }: BookingFlowProp
   const [bookingId, setBookingId] = useState<string | null>(null);
   const [amountPence, setAmountPence] = useState<number | null>(null);
   const [paymentStarted, setPaymentStarted] = useState(false);
+
+  // Lenis runs in `root` mode (see SmoothScroll), so it owns the window scroll
+  // and a raw window.scrollTo would be reset on its next rAF tick. Reach the
+  // live instance instead: `useLenis()` resolves the root instance, and returns
+  // undefined for reduced-motion users, for whom Lenis is never mounted. Hold it
+  // in a ref so the scroll effect below can depend on `step` alone — the
+  // instance flips undefined→defined once after hydration, and we must not let
+  // that flip fire a scroll on its own.
+  const lenis = useLenis();
+  const lenisRef = useRef(lenis);
+  useEffect(() => {
+    lenisRef.current = lenis;
+  }, [lenis]);
+
+  const sectionRef = useRef<HTMLElement>(null);
+  const hasMountedRef = useRef(false);
+
+  // On every step change (Next or Back), bring the top of the booking section
+  // into view so each step starts at its beginning instead of wherever the
+  // previous step was scrolled to. Smooth when motion is allowed, an instant
+  // jump under prefers-reduced-motion, and skipped on the initial mount.
+  useEffect(() => {
+    if (!hasMountedRef.current) {
+      hasMountedRef.current = true;
+      return;
+    }
+    const el = sectionRef.current;
+    if (!el) return;
+
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const instance = lenisRef.current;
+    if (instance) {
+      instance.scrollTo(el, { offset: 0, immediate: reducedMotion });
+    } else {
+      el.scrollIntoView({ block: "start", behavior: reducedMotion ? "auto" : "smooth" });
+    }
+  }, [step]);
 
   function update<K extends keyof BookingState>(key: K, value: BookingState[K]) {
     setState((s) => ({ ...s, [key]: value }));
@@ -249,7 +287,7 @@ export function BookingFlow({ initialServiceType = "standard" }: BookingFlowProp
   const showErrors = attemptedAdvance && !validateStep(state, step);
 
   return (
-    <section className="py-16 md:py-24 bg-[var(--color-bone)]">
+    <section ref={sectionRef} className="py-16 md:py-24 bg-[var(--color-bone)]">
       <Container width="narrow">
         <div className="mb-12">
           <p
