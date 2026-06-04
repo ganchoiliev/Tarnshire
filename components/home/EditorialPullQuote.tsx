@@ -27,7 +27,7 @@ export function EditorialPullQuote() {
               letterSpacing: "var(--tracking-label)",
             }}
           >
-            — Tarnshire
+            Tarnshire
           </p>
         </Reveal>
       </Container>

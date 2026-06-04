@@ -10,7 +10,7 @@ import type { LenisOptions } from "lenis";
 // mobile responsiveness and accessibility. Anchors are handled by Next's router
 // (the footer uses <Link href="/#services"> etc.), and Lenis re-syncs to the
 // resulting native scroll, so we deliberately do not enable Lenis's own anchor
-// handling — it would double-handle those clicks.
+// handling. It would double-handle those clicks.
 const LENIS_OPTIONS: LenisOptions = {
   lerp: 0.1,
   smoothWheel: true,
@@ -20,7 +20,7 @@ const LENIS_OPTIONS: LenisOptions = {
  * Mounts a single global Lenis instance that smooths the native window scroll.
  *
  * - `root` binds Lenis to the document, so it renders no wrapper element
- *   (SSR- and hydration-safe) and keeps window.scrollY authoritative — Framer
+ *   (SSR- and hydration-safe) and keeps window.scrollY authoritative. Framer
  *   Motion's useScroll / whileInView and in-page #anchor links keep working.
  * - Disabled entirely under prefers-reduced-motion: those users get plain
  *   native scrolling, with no Lenis instance created at all.

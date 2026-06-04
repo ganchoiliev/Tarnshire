@@ -21,7 +21,7 @@ import { formatGBP, fromPrice } from "@/lib/booking";
  * (aria-hidden + tabIndex -1 + pointer-events-none), so it is never a focus
  * trap. Reduced-motion safe: the show/hide is a plain CSS transition, which the
  * global prefers-reduced-motion rule in globals.css neutralises to an instant
- * state change — no bespoke motion code to opt out of.
+ * state change. No bespoke motion code to opt out of.
  */
 export function MobileBookBar() {
   const pathname = usePathname();
@@ -85,7 +85,7 @@ export function MobileBookBar() {
       <Link
         href="/home/book"
         tabIndex={visible ? undefined : -1}
-        aria-label={`Book a clean — from ${formatGBP(fromPrice("standard"))} per visit`}
+        aria-label={`Book a clean, from ${formatGBP(fromPrice("standard"))} per visit`}
         className="flex items-center justify-between gap-4 px-5 py-3 no-underline"
       >
         <span className="flex flex-col">

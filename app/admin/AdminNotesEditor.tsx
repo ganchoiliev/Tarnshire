@@ -59,7 +59,7 @@ export function AdminNotesEditor({ kind, id, currentNotes }: Props) {
         value={notes}
         onChange={(e) => setNotes(e.target.value)}
         rows={4}
-        placeholder="Internal notes — visible only to admin."
+        placeholder="Internal notes. Visible only to admin."
         className="w-full bg-[var(--color-bone)] border border-[var(--color-neutral-100)] rounded-[var(--radius-sm)] px-3 py-2 text-[var(--color-ink)] focus:outline-none focus:border-[var(--color-mineral)]"
         style={{
           fontFamily: "var(--font-sans-loaded), var(--font-sans)",

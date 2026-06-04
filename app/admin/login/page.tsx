@@ -5,7 +5,7 @@ import { Container } from "@/components/ui/Container";
 import { AdminLoginForm } from "./AdminLoginForm";
 
 export const metadata: Metadata = {
-  title: "Admin — Tarnshire",
+  title: "Admin",
   robots: { index: false, follow: false },
 };
 

@@ -11,7 +11,7 @@ export const metadata: Metadata = {
     "Book a Tarnshire clean in Didsbury, Chorlton, or Withington. Transparent pricing, same cleaner every visit, four-step booking.",
   alternates: { canonical: "/home/book" },
   openGraph: {
-    title: "Tarnshire — Book your first clean",
+    title: "Tarnshire · Book your first clean",
     description:
       "Transparent pricing, same cleaner every visit, instant booking across M20, M21, and M14.",
     url: "/home/book",

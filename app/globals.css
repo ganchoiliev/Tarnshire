@@ -127,7 +127,7 @@
 
 /* The global prefers-reduced-motion rule from layer base already neutralises animation-duration to 0.01ms, so no override needed here. */
 
-/* Animated link underline — grows from the left on hover/focus. Reduced-motion
+/* Animated link underline. Grows from the left on hover/focus. Reduced-motion
    users land on the same end state instantly (the global base rule neutralises
    this transition); it is a background-size change, never a transform. */
 .link-underline {

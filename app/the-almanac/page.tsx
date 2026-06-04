@@ -6,7 +6,7 @@ import { Prose } from "@/components/shared/Prose";
 import { ComingSoon } from "@/components/shared/ComingSoon";
 
 export const metadata: Metadata = {
-  title: "The Almanac — Tarnshire",
+  title: "The Almanac",
   description:
     "The editorial home of Tarnshire. Longform writing on care, the north, standards, and case studies. Launching alongside our first contracts in 2026.",
   alternates: { canonical: "/the-almanac" },

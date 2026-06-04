@@ -16,7 +16,7 @@ const steps: Step[] = [
   {
     number: "02",
     title: "Book in four steps",
-    body: "Your home, your schedule, your details. The price updates as you go — published rates, no quote call, no surprises.",
+    body: "Your home, your schedule, your details. The price updates as you go. Published rates, no quote call, no surprises.",
   },
   {
     number: "03",

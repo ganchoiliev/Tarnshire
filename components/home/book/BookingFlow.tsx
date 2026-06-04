@@ -269,7 +269,7 @@ export function BookingFlow({ initialServiceType = "standard" }: BookingFlowProp
             aria-valuenow={step}
             aria-valuemin={1}
             aria-valuemax={4}
-            aria-valuetext={`Step ${step} of 4 — ${STEP_LABELS[step]}`}
+            aria-valuetext={`Step ${step} of 4, ${STEP_LABELS[step]}`}
           >
             {([1, 2, 3, 4] as StepId[]).map((s) => {
               const done = s < step;
@@ -604,7 +604,7 @@ export function BookingFlow({ initialServiceType = "standard" }: BookingFlowProp
                   </svg>
                   <span>
                     No payment is taken until you confirm on the next step. Your card
-                    is handled securely by Stripe — Tarnshire never sees your card
+                    is handled securely by Stripe. Tarnshire never sees your card
                     number.
                   </span>
                 </p>

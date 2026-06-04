@@ -5,7 +5,7 @@ import { PageHero } from "@/components/shared/PageHero";
 import { Prose } from "@/components/shared/Prose";
 
 export const metadata: Metadata = {
-  title: "About — Tarnshire",
+  title: "About",
   description:
     "Tarnshire is a premium cleaning brand for Greater Manchester. Same cleaner every visit. Transparent pricing. We publish what we hold, not what we hope for.",
   alternates: { canonical: "/about" },
@@ -34,7 +34,7 @@ export default function AboutPage() {
         <Prose eyebrow="What we believe" heading="Three commitments. No deviation." background="bone-soft">
           <h3>The same cleaner, every visit</h3>
           <p>
-            Cleaning is intimate work. The person who knows your home shouldn&apos;t change every week. Every Tarnshire recurring customer is matched to a single named cleaner for the long term. If that cleaner is on holiday or unwell, you&apos;re told before the visit — not surprised at the door.
+            Cleaning is intimate work. The person who knows your home shouldn&apos;t change every week. Every Tarnshire recurring customer is matched to a single named cleaner for the long term. If that cleaner is on holiday or unwell, you&apos;re told before the visit, not surprised at the door.
           </p>
           <h3>Transparent pricing</h3>
           <p>
@@ -48,7 +48,7 @@ export default function AboutPage() {
 
         <Prose eyebrow="Where we work" heading="South Manchester first. Greater Manchester next.">
           <p>
-            Tarnshire launches in three postcodes — <strong>M20 Didsbury, M21 Chorlton, and M14 Withington</strong> — the South Manchester premium triangle where recurring premium-domestic demand concentrates. From there we expand outward through 2026 and 2027: Sale, Altrincham, Hale, and Wilmslow in Q3 2026; central Manchester and Salford Quays for commercial work in Q4 2026; the outer Greater Manchester boroughs through a partner-operator model from 2027.
+            Tarnshire launches in three postcodes: <strong>M20 Didsbury, M21 Chorlton, and M14 Withington</strong>, the South Manchester premium triangle where recurring premium-domestic demand concentrates. From there we expand outward through 2026 and 2027: Sale, Altrincham, Hale, and Wilmslow in Q3 2026; central Manchester and Salford Quays for commercial work in Q4 2026; the outer Greater Manchester boroughs through a partner-operator model from 2027.
           </p>
           <p>
             Every Greater Manchester borough has a landing page on this site, even the ones where Tarnshire isn&apos;t operationally live yet. The pages where we are live show &ldquo;Available now&rdquo; and a booking link. The pages where we&apos;re not yet live show &ldquo;Coming soon&rdquo; and a waitlist. We don&apos;t pretend to operate in postcodes we don&apos;t cover.
@@ -57,7 +57,7 @@ export default function AboutPage() {
 
         <Prose eyebrow="About the name" heading="Tarn and shire." background="bone-soft">
           <p>
-            Tarn is the Cumbrian and Old English word for a small mountain lake — the still bodies of water that gather in the high places of the Lake District and the Yorkshire Dales. Shire is the Old English administrative suffix for a region: Lancashire, Yorkshire, Cheshire. The compound is coined: there is no real Tarnshire on the map of England, and the brand has the freedom to define what the name means.
+            Tarn is the Cumbrian and Old English word for a small mountain lake, the still bodies of water that gather in the high places of the Lake District and the Yorkshire Dales. Shire is the Old English administrative suffix for a region: Lancashire, Yorkshire, Cheshire. The compound is coined: there is no real Tarnshire on the map of England, and the brand has the freedom to define what the name means.
           </p>
           <p>
             We chose it for what it carries: northern English heritage without parochialism, administrative gravitas for commercial procurement, the quiet reverence of the upland water for the domestic register. It also passed the only naming test that matters: both <strong>tarnshire.co.uk</strong> and <strong>tarnshire.com</strong> were available the day we needed them.

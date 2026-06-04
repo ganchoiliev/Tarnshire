@@ -5,7 +5,7 @@ import { PageHero } from "@/components/shared/PageHero";
 import { Container } from "@/components/ui/Container";
 
 export const metadata: Metadata = {
-  title: "Contact — Tarnshire",
+  title: "Contact",
   description:
     "Contact Tarnshire. Email response within 24 hours. Premium cleaning across Greater Manchester.",
   alternates: { canonical: "/contact" },

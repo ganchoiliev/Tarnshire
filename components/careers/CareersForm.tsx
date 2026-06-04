@@ -216,7 +216,7 @@ export function CareersForm() {
                 onChange={(v) => update("boroughPreference", v)}
                 error={
                   err("boroughPreference")
-                    ? "Pick a borough — 'Any of the three' is a valid answer."
+                    ? "Pick a borough. 'Any of the three' is a valid answer."
                     : undefined
                 }
               />
@@ -253,7 +253,7 @@ export function CareersForm() {
                 value={state.whyTarnshire}
                 onChange={(v) => update("whyTarnshire", v)}
                 helper="One or two sentences. Optional but reads well at the interview."
-                placeholder="Optional — what makes Tarnshire interesting to you?"
+                placeholder="Optional. What makes Tarnshire interesting to you?"
                 rows={3}
               />
             </div>
@@ -282,7 +282,7 @@ export function CareersForm() {
                 onChange={(v) => update("rightToWork", v)}
                 error={
                   err("rightToWork")
-                    ? "Required — Tarnshire only contracts UK right-to-work holders."
+                    ? "Required. Tarnshire only contracts UK right-to-work holders."
                     : undefined
                 }
               />
@@ -295,7 +295,7 @@ export function CareersForm() {
                 onChange={(v) => update("dbsWilling", v)}
                 error={
                   err("dbsWilling")
-                    ? "Required — DBS is non-negotiable for every contractor."
+                    ? "Required. DBS is non-negotiable for every contractor."
                     : undefined
                 }
               />
@@ -306,7 +306,7 @@ export function CareersForm() {
                 required
                 value={state.selfEmployedOk}
                 onChange={(v) => update("selfEmployedOk", v)}
-                error={err("selfEmployedOk") ? "Tell us either way — useful to know." : undefined}
+                error={err("selfEmployedOk") ? "Tell us either way. Useful to know." : undefined}
               />
               <QuoteTextarea
                 id="references"
@@ -358,7 +358,7 @@ export function CareersForm() {
                 style={{ fontSize: "var(--text-body-sm)" }}
                 role="alert"
               >
-                Some required fields are still empty. Scroll up — the first one is highlighted.
+                Some required fields are still empty. Scroll up. The first one is highlighted.
               </p>
             ) : null}
             <div className="flex items-center justify-end">

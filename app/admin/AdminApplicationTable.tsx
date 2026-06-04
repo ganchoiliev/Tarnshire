@@ -36,8 +36,8 @@ function formatDate(iso: string): string {
 
 const EXPERIENCE_LABELS: Record<string, string> = {
   lt_6: "<6mo",
-  "6_12": "6–12mo",
-  "12_24": "1–2yr",
+  "6_12": "6-12mo",
+  "12_24": "1-2yr",
   gt_24: "2yr+",
 };
 

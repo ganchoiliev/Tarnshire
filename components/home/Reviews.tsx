@@ -5,7 +5,7 @@ import { reviews } from "@/lib/reviews";
 
 /**
  * Real-reviews-only social proof. Renders nothing until lib/reviews.ts holds at
- * least one genuine, consented entry — the structured slot is intentionally
+ * least one genuine, consented entry. The structured slot is intentionally
  * empty at launch. We never fabricate testimonials or counts.
  */
 export function Reviews() {

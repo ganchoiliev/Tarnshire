@@ -13,8 +13,8 @@ export function PageHero({ eyebrow, headline, lede, children }: PageHeroProps) {
   return (
     <section className="border-b border-[var(--color-neutral-100)] bg-[var(--color-bone)] py-16 md:py-24 lg:py-28">
       <Container>
-        {/* Rise-only (no fade) keeps the heading — the LCP element on these
-            image-less heroes — painted at first paint. Transform-only, so no CLS. */}
+        {/* Rise-only (no fade) keeps the heading, the LCP element on these
+            image-less heroes, painted at first paint. Transform-only, so no CLS. */}
         <Reveal className="max-w-[760px]" fade={false}>
           <div
             className="inline-flex items-center gap-3 text-[var(--color-mineral)] font-medium mb-6 uppercase"

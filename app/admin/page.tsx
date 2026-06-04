@@ -9,7 +9,7 @@ import { AdminBookingTable } from "./AdminBookingTable";
 import { AdminApplicationTable } from "./AdminApplicationTable";
 
 export const metadata: Metadata = {
-  title: "Admin — Tarnshire",
+  title: "Admin",
   robots: { index: false, follow: false },
 };
 

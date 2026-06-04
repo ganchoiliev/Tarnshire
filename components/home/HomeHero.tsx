@@ -51,7 +51,7 @@ export function HomeHero() {
     if (y !== scrollPx.get()) scrollPx.set(y);
   });
   // ±6% travel. The image carries a constant 1.2 scale (10% overflow per edge),
-  // so the drift never reveals an edge — and the section clips it anyway.
+  // so the drift never reveals an edge, and the section clips it anyway.
   const imageY = useTransform(scrollPx, [0, 640], ["-6%", "6%"]);
 
   const groupProps = reduceMotion
@@ -114,7 +114,7 @@ export function HomeHero() {
                   Launch offer
                 </span>
                 <span className="text-[var(--color-neutral-700)] transition-colors duration-[var(--duration-fast)] group-hover:text-[var(--color-ink)]">
-                  {" — 20% off your first three weekly cleans, for our first ten customers"}
+                  {", 20% off your first three weekly cleans, for our first ten customers"}
                 </span>
                 <span aria-hidden className="text-[var(--color-mineral)]">
                   {" →"}

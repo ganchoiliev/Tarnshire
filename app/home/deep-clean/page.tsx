@@ -7,12 +7,12 @@ import { Button } from "@/components/ui/Button";
 import { IMAGES } from "@/lib/images";
 
 export const metadata: Metadata = {
-  title: "Tarnshire Deep Clean — Greater Manchester | Tarnshire",
+  title: "Tarnshire Deep Clean, Greater Manchester",
   description:
     "A 4-hour minimum, top-to-bottom deep clean for move-in, move-out, post-renovation, or pre-event. Available in M20, M21, and M14.",
   alternates: { canonical: "/home/deep-clean" },
   openGraph: {
-    title: "Tarnshire Deep Clean — Greater Manchester",
+    title: "Tarnshire Deep Clean, Greater Manchester",
     description:
       "A 4-hour minimum, top-to-bottom deep clean. Move-in, move-out, post-renovation, pre-event.",
     url: "/home/deep-clean",
@@ -76,7 +76,7 @@ const SCOPE_EXCLUDED: string[] = [
 
 const PRICE_TIERS: { label: string; price: string }[] = [
   { label: "Studio", price: "£120" },
-  { label: "1–2 bed", price: "£120" },
+  { label: "1-2 bed", price: "£120" },
   { label: "3 bed", price: "£150" },
   { label: "4 bed", price: "£190" },
   { label: "5+ bed", price: "£230" },
@@ -204,7 +204,7 @@ export default function DeepCleanPage() {
           </Container>
         </section>
 
-        {/* Scope — included */}
+        {/* Scope: included */}
         <section className="py-16 md:py-24 border-b border-[var(--color-neutral-100)] bg-[var(--color-bone-soft)]">
           <Container>
             <div className="max-w-[760px] mb-12">
@@ -262,7 +262,7 @@ export default function DeepCleanPage() {
           </Container>
         </section>
 
-        {/* Scope — excluded */}
+        {/* Scope: excluded */}
         <section className="py-16 md:py-24 border-b border-[var(--color-neutral-100)] bg-[var(--color-bone)]">
           <Container>
             <div className="max-w-[760px]">
@@ -287,7 +287,7 @@ export default function DeepCleanPage() {
                 className="text-[var(--color-neutral-700)] mb-8"
                 style={{ fontSize: "var(--text-body-lg)", lineHeight: 1.55 }}
               >
-                Some things aren&apos;t part of a Deep Clean — for safety, for honesty, or because they need a specialist. If you need any of these, tell us and we&apos;ll recommend who to call.
+                Some things aren&apos;t part of a Deep Clean, for safety, for honesty, or because they need a specialist. If you need any of these, tell us and we&apos;ll recommend who to call.
               </p>
               <ul className="flex flex-col gap-2">
                 {SCOPE_EXCLUDED.map((item) => (
@@ -300,7 +300,7 @@ export default function DeepCleanPage() {
                       className="text-[var(--color-neutral-300)] mt-[0.4em] flex-shrink-0"
                       aria-hidden
                     >
-                      —
+                      ✗
                     </span>
                     <span>{item}</span>
                   </li>

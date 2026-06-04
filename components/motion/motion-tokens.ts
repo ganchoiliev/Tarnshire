@@ -1,4 +1,4 @@
-// Motion tokens — JS mirrors of the CSS custom properties in app/globals.css.
+// Motion tokens: JS mirrors of the CSS custom properties in app/globals.css.
 //
 // Framer Motion and Lenis need literal JS values (seconds, bezier tuples) and
 // cannot read CSS custom properties, so these are kept in 1:1 sync with the

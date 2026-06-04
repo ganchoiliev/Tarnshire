@@ -19,7 +19,7 @@ type RevealProps = {
   as?: RevealTag;
   /** Stagger offset in seconds, for cascading grouped items. */
   delay?: number;
-  /** Entrance travel distance in px (transform-only — no layout shift). */
+  /** Entrance travel distance in px (transform-only, no layout shift). */
   distance?: number;
   /** Duration in seconds. */
   duration?: number;

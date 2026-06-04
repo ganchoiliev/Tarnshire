@@ -7,12 +7,12 @@ import { CleanerShowcase } from "@/components/home/CleanerShowcase";
 import { CareersForm } from "@/components/careers/CareersForm";
 
 export const metadata: Metadata = {
-  title: "Careers — Tarnshire",
+  title: "Careers",
   description:
     "Become a Tarnshire cleaner. Self-employed, fairly paid, with your own recurring clients across Didsbury, Chorlton, and Withington. Five-working-day response.",
   alternates: { canonical: "/careers" },
   openGraph: {
-    title: "Tarnshire — Careers",
+    title: "Tarnshire · Careers",
     description: "Self-employed, fairly paid, recurring clients in your own borough.",
     url: "/careers",
     images: ["/img/1-5.jpg"],
@@ -27,7 +27,7 @@ export default function CareersPage() {
         <PageHero
           eyebrow="Careers"
           headline="Become a Tarnshire cleaner."
-          lede="Self-employed, fairly paid, with your own recurring clients in your own borough. Tarnshire is hiring our founding contractor cohort across Didsbury, Chorlton, and Withington now. Application below — five-working-day response."
+          lede="Self-employed, fairly paid, with your own recurring clients in your own borough. Tarnshire is hiring our founding contractor cohort across Didsbury, Chorlton, and Withington now. Application below. Five-working-day response."
         />
 
         <Prose eyebrow="What we offer" heading="The deal.">
