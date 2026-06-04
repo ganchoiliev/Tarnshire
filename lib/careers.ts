@@ -41,7 +41,7 @@ export const EXPERIENCE_OPTIONS = [
   {
     value: "lt_6",
     label: "Less than 6 months",
-    helper: "Tarnshire requires 6 months minimum — applications below this don't progress at v1.",
+    helper: "Tarnshire requires 6 months minimum: applications below this don't progress at v1.",
   },
   { value: "6_12", label: "6–12 months" },
   { value: "12_24", label: "1–2 years" },
