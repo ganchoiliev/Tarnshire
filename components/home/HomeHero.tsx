@@ -26,8 +26,14 @@ const group: Variants = {
   },
 };
 
+// Rise-only entrance. Opacity stays at 1 in both states, so the headline, lede
+// and CTA (the above-the-fold LCP content) paint at first byte: the static
+// shell ships them visible, transformed only, never opacity:0. Mirrors the
+// fade={false} approach PageHero already uses. The stagger (see `group`) still
+// gives the cascade. This also removes the pre-hydration invisible flash that
+// reduced-motion users would otherwise see before hydration corrects it.
 const piece: Variants = {
-  hidden: { opacity: 0, y: REVEAL_DISTANCE },
+  hidden: { opacity: 1, y: REVEAL_DISTANCE },
   visible: {
     opacity: 1,
     y: 0,
@@ -75,6 +81,19 @@ export function HomeHero() {
           className="object-cover opacity-[0.22]"
         />
       </motion.div>
+      {/* Legibility scrim: a barely-there, left-weighted wash of the page's own
+          bone that feathers to transparent before mid-section, so the headline
+          always holds contrast over the photo while the airy right-hand space
+          stays clear. color-mix keeps it tied to the --color-bone token; static,
+          so it shows for every user (reduced-motion included). */}
+      <div
+        aria-hidden
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          background:
+            "linear-gradient(to right, color-mix(in srgb, var(--color-bone) 80%, transparent) 0%, color-mix(in srgb, var(--color-bone) 40%, transparent) 30%, transparent 60%)",
+        }}
+      />
       <Container className="relative z-10">
         <motion.div className="max-w-[720px]" {...groupProps}>
           <motion.h1
