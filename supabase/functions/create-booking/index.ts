@@ -65,7 +65,12 @@ function calculatePricePence(
   };
   const b = base[bedrooms] ?? 4200;
   const a = adjust[frequency] ?? 1.0;
-  return Math.round(b * a);
+  // Round the charge to a whole pound so it equals the price shown on the site.
+  // b is in pence; lib/booking.ts rounds the display in whole pounds
+  // (Math.round(poundsBase * a)). Rounding to the nearest 100 pence here keeps the
+  // charge identical to the displayed figure and removes the monthly/one-off
+  // divergence (e.g. monthly 1-2 bed was £44 shown vs 4410p charged).
+  return Math.round((b * a) / 100) * 100;
 }
 
 async function createStripePaymentIntent(params: {
