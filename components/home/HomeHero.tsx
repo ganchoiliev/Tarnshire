@@ -141,7 +141,21 @@ export function HomeHero() {
               </span>
             </Link>
             <div className="flex flex-wrap items-center gap-6">
-              <Button href="/home/book" variant="accent" size="lg">
+              {/* Hero CTA refinement. The lg primitive's 64/24px padding and
+                  16px arrow gap read as a heavy slab here (and force a two-line
+                  wrap on mobile). Trim to a leaner 48/16px with an 8px gap — all
+                  spacing-scale tokens — for bgslaw-calibrated restraint, while
+                  staying the solid accent primary (500 weight kept; radius
+                  tightened to the 2px --radius-xs token for a crisper edge).
+                  Important modifiers because the project has no class-merge util,
+                  so a plain className can't beat the primitive's utilities; scoped
+                  to this one instance, so every other Button usage is untouched. */}
+              <Button
+                href="/home/book"
+                variant="accent"
+                size="lg"
+                className="px-6! py-3! gap-2! rounded-[var(--radius-xs)]!"
+              >
                 Book your first clean
               </Button>
               <Link
