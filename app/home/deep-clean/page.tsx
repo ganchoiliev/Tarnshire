@@ -75,7 +75,7 @@ const SCOPE_EXCLUDED: string[] = [
 ];
 
 const PRICE_TIERS: { label: string; price: string }[] = [
-  { label: "Studio", price: "£100" },
+  { label: "Studio", price: "£120" },
   { label: "1–2 bed", price: "£120" },
   { label: "3 bed", price: "£150" },
   { label: "4 bed", price: "£190" },

@@ -102,16 +102,16 @@ export const TIME_SLOT_OPTIONS = [
  * (calculatePricePence), from which the Stripe charge derives. BOTH MUST MATCH.
  */
 export const STANDARD_BASE_RATES: Record<string, number> = {
-  studio: 35,
-  "1": 42,
-  "2": 42,
-  "3": 52,
-  "4": 62,
-  "5_plus": 72,
+  studio: 45,
+  "1": 60,
+  "2": 60,
+  "3": 75,
+  "4": 90,
+  "5_plus": 105,
 };
 
 export const DEEP_CLEAN_RATES: Record<string, number> = {
-  studio: 100,
+  studio: 120,
   "1": 120,
   "2": 120,
   "3": 150,
@@ -127,7 +127,7 @@ export const FREQUENCY_MULTIPLIERS: Record<string, number> = {
 };
 
 /** Fallback standard rate when bedrooms is unknown. Mirrors the Edge Function. */
-export const STANDARD_DEFAULT_RATE = 42;
+export const STANDARD_DEFAULT_RATE = 60;
 
 /**
  * Calculate price per visit in GBP.

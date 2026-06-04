@@ -220,7 +220,7 @@ export function BookingFlow({ initialServiceType = "standard" }: BookingFlowProp
           >
             {state.serviceType === "deep_clean" ? (
               <>
-                A confirmation email is on its way to <strong>{state.contactEmail}</strong>. Our operations lead will contact you within 24 working hours to confirm whether one or two cleaners will attend on {state.preferredDate}.
+                A confirmation email is on its way to <strong>{state.contactEmail}</strong>. Our operations lead will contact you within 24 working hours to confirm which cleaner will attend on {state.preferredDate}.
               </>
             ) : (
               <>
@@ -446,7 +446,7 @@ export function BookingFlow({ initialServiceType = "standard" }: BookingFlowProp
                   className="text-[var(--color-ink)]"
                   style={{ fontSize: "var(--text-body)", lineHeight: 1.55 }}
                 >
-                  4-hour minimum visit. One cleaner for ~4 hours or two cleaners for ~2 hours, depending on availability — we&apos;ll confirm which within 24 working hours.
+                  4-hour minimum visit, with one cleaner. Larger homes take longer, and we&apos;ll confirm the visit length within 24 working hours.
                 </p>
               </div>
             ) : (

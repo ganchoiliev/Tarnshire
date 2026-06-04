@@ -40,7 +40,7 @@ function calculatePricePence(
 ): number {
   if (serviceType === "deep_clean") {
     const deepCleanBase: Record<string, number> = {
-      studio: 10000,
+      studio: 12000,
       "1": 12000,
       "2": 12000,
       "3": 15000,
@@ -50,12 +50,12 @@ function calculatePricePence(
     return deepCleanBase[bedrooms] ?? 0;
   }
   const base: Record<string, number> = {
-    studio: 3500,
-    "1": 4200,
-    "2": 4200,
-    "3": 5200,
-    "4": 6200,
-    "5_plus": 7200,
+    studio: 4500,
+    "1": 6000,
+    "2": 6000,
+    "3": 7500,
+    "4": 9000,
+    "5_plus": 10500,
   };
   const adjust: Record<string, number> = {
     weekly: 1.0,
@@ -63,7 +63,7 @@ function calculatePricePence(
     monthly: 1.05,
     one_off: 1.5,
   };
-  const b = base[bedrooms] ?? 4200;
+  const b = base[bedrooms] ?? 6000;
   const a = adjust[frequency] ?? 1.0;
   // Round the charge to a whole pound so it equals the price shown on the site.
   // b is in pence; lib/booking.ts rounds the display in whole pounds

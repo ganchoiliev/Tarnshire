@@ -36,7 +36,7 @@ export default function CareersPage() {
               <strong>Self-employed, not zero-hours.</strong> You&apos;re a contractor, not an employee. You set your weekly availability, you choose your recurring clients, you bill on a schedule that works for you.
             </li>
             <li>
-              <strong>Fair pay.</strong> Our domestic rate to customers is £42 for two cleaners for one hour. Our contractors take home above the Manchester Living Wage on every paid hour. Documented, on the contract, no game.
+              <strong>Fair pay.</strong> Our domestic cleans start at £45 per visit, with one cleaner per home. Our contractors take home a fair hourly rate, above the Manchester Living Wage, on every paid hour. Documented, on the contract, no game.
             </li>
             <li>
               <strong>Recurring clients, not piecework.</strong> The same customers every week or fortnight. Build relationships. Get good at one home, then another, then another.
