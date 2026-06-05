@@ -38,6 +38,12 @@ const STEP_SHORT_LABELS: Record<StepId, string> = {
   4: "Details",
 };
 
+// Breathing room left above the form when a step change scrolls to its top.
+// The site header is static (it scrolls away with the page), so this is visual
+// spacing, not sticky-header clearance — if a sticky header is ever introduced
+// above this section, add its height here.
+const STEP_SCROLL_MARGIN = 24;
+
 function isEmail(v: string): boolean {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
 }
@@ -99,28 +105,67 @@ export function BookingFlow({ initialServiceType = "standard" }: BookingFlowProp
     lenisRef.current = lenis;
   }, [lenis]);
 
-  const sectionRef = useRef<HTMLElement>(null);
+  const topRef = useRef<HTMLDivElement>(null);
   const hasMountedRef = useRef(false);
 
-  // On every step change (Next or Back), bring the top of the booking section
+  // On every step change (Next or Back), scroll the top of the booking form
   // into view so each step starts at its beginning instead of wherever the
-  // previous step was scrolled to. Smooth when motion is allowed, an instant
-  // jump under prefers-reduced-motion, and skipped on the initial mount.
+  // previous step left the viewport.
+  //
+  // The work is deferred to after layout (two rAFs) and the target is
+  // re-measured then, because a step change can change the section's height —
+  // e.g. Back from the tall details step to a short one — which shrinks the
+  // document. On the frame the step swaps, the live Lenis instance's internal
+  // scroll is briefly stale, so resolving an *element* target (Lenis adds the
+  // element's rect.top to its own scroll, then clamps to its own stale limit)
+  // can overshoot to the document end and land on the footer. Instead we let
+  // layout settle, measure the anchor's absolute position from the live window
+  // scroll (authoritative in Lenis `root` mode), clamp it to the document, and
+  // scroll to that absolute number. Smooth when motion is allowed, instant
+  // under reduced motion (no Lenis instance), skipped on the initial mount.
   useEffect(() => {
     if (!hasMountedRef.current) {
       hasMountedRef.current = true;
       return;
     }
-    const el = sectionRef.current;
-    if (!el) return;
 
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const instance = lenisRef.current;
-    if (instance) {
-      instance.scrollTo(el, { offset: 0, immediate: reducedMotion });
-    } else {
-      el.scrollIntoView({ block: "start", behavior: reducedMotion ? "auto" : "smooth" });
-    }
+
+    let raf2 = 0;
+    const raf1 = requestAnimationFrame(() => {
+      raf2 = requestAnimationFrame(() => {
+        const anchor = topRef.current;
+        if (!anchor) return;
+
+        // Absolute document position of the anchor, measured live: in Lenis
+        // `root` mode window.scrollY stays authoritative, so rect.top + scrollY
+        // is correct regardless of Lenis's internal animatedScroll.
+        const anchorTop = anchor.getBoundingClientRect().top + window.scrollY;
+        const maxScroll = Math.max(
+          0,
+          document.documentElement.scrollHeight - window.innerHeight,
+        );
+        // Clamp to [0, maxScroll] so a stale measurement can never scroll past
+        // the document end (which is what reveals the footer).
+        const top = Math.min(Math.max(0, anchorTop - STEP_SCROLL_MARGIN), maxScroll);
+
+        const instance = lenisRef.current;
+        if (instance) {
+          // Pass a number, not the element: Lenis resolves an element target
+          // against its own (briefly stale) scroll; an absolute number does not.
+          instance.scrollTo(top, { immediate: reducedMotion });
+        } else {
+          // No Lenis instance: reduced-motion users and the brief pre-hydration
+          // window. Drive the native scroll directly.
+          window.scrollTo({ top, behavior: reducedMotion ? "auto" : "smooth" });
+        }
+      });
+    });
+
+    return () => {
+      cancelAnimationFrame(raf1);
+      cancelAnimationFrame(raf2);
+    };
   }, [step]);
 
   function update<K extends keyof BookingState>(key: K, value: BookingState[K]) {
@@ -286,7 +331,12 @@ export function BookingFlow({ initialServiceType = "standard" }: BookingFlowProp
   const showErrors = attemptedAdvance && !validateStep(state, step);
 
   return (
-    <section ref={sectionRef} className="py-16 md:py-24 bg-[var(--color-bone)]">
+    <section className="py-16 md:py-24 bg-[var(--color-bone)]">
+      {/* Stable top-of-form scroll anchor. Every step change scrolls here so
+          each step lands at its top (see the [step] effect). Zero-height and
+          aria-hidden: it's a scroll target only, never content, and its
+          position is re-measured live at scroll time. */}
+      <div ref={topRef} aria-hidden className="h-0" />
       <Container width="narrow">
         <div className="mb-12">
           <p
