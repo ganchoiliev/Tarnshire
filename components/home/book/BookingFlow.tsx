@@ -498,6 +498,7 @@ export function BookingFlow({ initialServiceType = "standard" }: BookingFlowProp
               label="Bedrooms"
               options={BEDROOM_OPTIONS}
               required
+              helper="Your per-visit price is set by the number of bedrooms."
               value={state.bedrooms}
               onChange={(v) => update("bedrooms", v)}
               error={showErrors && !state.bedrooms ? "Pick a bedroom count." : undefined}
@@ -507,6 +508,7 @@ export function BookingFlow({ initialServiceType = "standard" }: BookingFlowProp
               label="Bathrooms"
               options={BATHROOM_OPTIONS}
               required
+              helper="Always included, with no per-bathroom surcharge. This helps us plan your visit and match the right cleaner."
               value={state.bathrooms}
               onChange={(v) => update("bathrooms", v)}
               error={showErrors && !state.bathrooms ? "Pick a bathroom count." : undefined}
@@ -514,7 +516,7 @@ export function BookingFlow({ initialServiceType = "standard" }: BookingFlowProp
             <QuoteCheckboxGroup
               label="Additional rooms"
               options={ADDITIONAL_ROOM_OPTIONS}
-              helper="Optional. Tick any that apply."
+              helper="Optional. Always included, with no per-room surcharge. These help us plan your visit and match the right cleaner."
               value={state.additionalRooms}
               onChange={(v) => update("additionalRooms", v)}
             />
@@ -542,6 +544,7 @@ export function BookingFlow({ initialServiceType = "standard" }: BookingFlowProp
                 label="Frequency"
                 options={FREQUENCY_OPTIONS}
                 required
+                helper="Along with bedrooms, this sets your price. Weekly and fortnightly cost the same per visit; monthly adds a small premium."
                 value={state.frequency}
                 onChange={(v) => update("frequency", v)}
                 error={
